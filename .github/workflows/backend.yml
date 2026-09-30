@@ -1,0 +1,47 @@
+name: Build backend
+
+on:
+    push:
+        branches: [main, develop]
+        paths:
+        - 'finapp/backend/**'
+    pull_request:
+        branches: [main, develop]
+        paths:
+        - 'finapp/backend/**'
+
+env:
+    DOTNET_CONFIGURATION: Release
+    DOTNET_VERSION: '10.0'
+
+defaults:
+    run:
+        working-directory: finapp/backend
+
+jobs:
+    check-and-test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: ${{ env.DOTNET_VERSION }}
+
+            - name: Cache NuGet packages
+              uses: actions/cache@v4
+              with:
+                  path: ~/.nuget/packages
+                  key: \({{ runner.os }}-nuget-\){{ hashFiles('**/packages.lock.json') }}-${{ hashFiles('**/*.csproj') }}
+                  restore-keys: |
+                      ${{ runner.os }}-nuget-
+
+            - name: Restore dependencies
+              run: dotnet restore
+
+            - name: Build
+              run: dotnet build --configuration ${{ env.DOTNET_CONFIGURATION }} --no-restore
+
+            - name: Test
+              run: dotnet test --configuration ${{ env.DOTNET_CONFIGURATION }} --no-build --verbosity normal
