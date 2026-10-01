@@ -1,0 +1,12 @@
+# docker env file
+.env
+
+# backend
+backend/.vscode
+backend/.idea
+
+# frontend
+frontend/.vscode
+frontend/.idea
+frontend/node_modules
+frontend/.angular
