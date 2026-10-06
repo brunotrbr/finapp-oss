@@ -10,6 +10,18 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-caderno-mono: var(--font-caderno-numbers), ui-monospace, monospace;
+  --font-caderno-display: var(--font-caderno-serif), ui-serif, Georgia, serif;
+  --color-paper: var(--caderno-paper);
+  --color-paper-deep: var(--caderno-paper-deep);
+  --color-paper-line: var(--caderno-paper-line);
+  --color-ink: var(--caderno-ink);
+  --color-royal: var(--caderno-royal);
+  --color-royal-deep: var(--caderno-royal-deep);
+  --color-royal-mid: var(--caderno-royal-mid);
+  --color-gold: var(--caderno-gold);
+  --color-gold-bright: var(--caderno-gold-bright);
+  --color-caderno-muted: var(--caderno-muted);
 }
 
 @media (prefers-color-scheme: dark) {

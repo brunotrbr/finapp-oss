@@ -18,9 +18,8 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (pathname === "/login" && hasSessionCookie) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
+  // /login verifies the session server-side before redirecting. Cookie presence
+  // alone would trap expired or forged sessions in a /login <-> /dashboard loop.
 
   return NextResponse.next();
 }

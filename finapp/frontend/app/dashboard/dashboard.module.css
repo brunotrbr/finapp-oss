@@ -1,0 +1,93 @@
+.dashboard {
+  --caderno-paper: oklch(0.967 0.0082 91);
+  --caderno-paper-deep: oklch(0.9314 0.014 89);
+  --caderno-paper-line: oklch(0.8773 0.0229 87);
+  --caderno-ink: oklch(0.2522 0.0562 264);
+  --caderno-royal: oklch(0.3526 0.0934 259);
+  --caderno-royal-deep: oklch(0.2902 0.079 260);
+  --caderno-royal-mid: oklch(0.4346 0.091 255);
+  --caderno-gold: oklch(0.7309 0.1146 85);
+  --caderno-gold-bright: oklch(0.7949 0.1045 87);
+  --caderno-muted: oklch(0.5185 0.018 86);
+
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  background: var(--caderno-paper);
+  color: var(--caderno-ink);
+  color-scheme: light;
+  font-family: var(--font-caderno-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.dashboard button {
+  cursor: pointer;
+}
+
+.dashboard button:disabled {
+  cursor: wait;
+}
+
+.dashboard button:focus-visible {
+  outline: 2px solid var(--caderno-royal-mid);
+  outline-offset: 3px;
+}
+
+.navigationDialog {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(360px, 90vw);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--caderno-paper-line);
+  background: var(--caderno-paper-deep);
+  color: var(--caderno-ink);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateX(100%);
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    display 280ms allow-discrete,
+    overlay 280ms allow-discrete;
+}
+
+.navigationDialog[open] {
+  transform: translateX(0);
+}
+
+.navigationDialog::backdrop {
+  background: color-mix(in oklch, var(--caderno-ink) 45%, transparent);
+  opacity: 0;
+  transition:
+    opacity 280ms ease-out,
+    display 280ms allow-discrete,
+    overlay 280ms allow-discrete;
+}
+
+.navigationDialog[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .navigationDialog[open] {
+    transform: translateX(100%);
+  }
+
+  .navigationDialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard button {
+    transition: none;
+  }
+
+  .navigationDialog,
+  .navigationDialog::backdrop {
+    transition: none;
+  }
+}
