@@ -7,7 +7,7 @@ import { useFinance } from "@/features/finance/model/finance-context";
 import { Field } from "@/shared/ui/field";
 import { Notice } from "@/shared/ui/feedback";
 import { PageHeader } from "@/shared/ui/page-header";
-import { buttonClass, inputClass } from "@/shared/ui/styles";
+import { buttonClass, formCardClass, inputClass } from "@/shared/ui/styles";
 
 export function ProfileSettings() {
   const { state, dispatch } = useFinance();
@@ -21,5 +21,5 @@ export function ProfileSettings() {
     dispatch({ type: "profile/name", name });
     router.push("/dashboard/settings");
   }
-  return <div className="space-y-6"><PageHeader title="Meu perfil" /><form onSubmit={submit} className="grid gap-4 rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950"><Field label="Nome exibido" error={error}><input name="name" className={inputClass} defaultValue={state.displayName} required /></Field><button className={buttonClass}>Salvar nome</button></form><Notice>Esta alteração fica somente em memória. Ela não atualiza o perfil do Firebase e será perdida ao recarregar.</Notice></div>;
+  return <div className="space-y-6"><PageHeader title="Meu perfil" eyebrow="Preferências" /><form onSubmit={submit} className={formCardClass}><Field label="Nome exibido" error={error}><input name="name" className={inputClass} defaultValue={state.displayName} required /></Field><button className={`${buttonClass} w-full`}>Salvar nome</button></form><Notice>Esta alteração fica somente em memória. Ela não atualiza o perfil do Firebase e será perdida ao recarregar.</Notice></div>;
 }

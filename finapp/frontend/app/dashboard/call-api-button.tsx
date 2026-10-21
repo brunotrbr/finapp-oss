@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { firebaseAuth } from "@/infrastructure/firebase/client";
+import { buttonClass } from "@/shared/ui/styles";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -45,19 +46,19 @@ export function CallApiButton() {
         type="button"
         onClick={handleClick}
         disabled={pending}
-        className="h-11 rounded-full bg-foreground px-5 text-base font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
+        className={buttonClass}
       >
         Call /hello API
       </button>
 
       {error && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+        <p role="alert" className="rounded-xl bg-expense-container p-3 text-sm text-expense">
           {error}
         </p>
       )}
 
       {result && (
-        <pre className="w-full overflow-x-auto rounded-lg bg-zinc-100 p-4 font-mono text-sm dark:bg-zinc-900">
+        <pre className="w-full overflow-x-auto rounded-xl bg-surface-subtle p-4 font-mono text-sm text-foreground">
           {result}
         </pre>
       )}

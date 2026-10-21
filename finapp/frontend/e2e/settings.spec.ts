@@ -35,7 +35,7 @@ test("edita perfil em memória, adiciona categoria e rejeita duplicata", async (
 test("navega pelos estados somente por teclado e mantém tema, zoom e conteúdo offline", async ({ page, context }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await login(page);
-  await expect(page.locator("html")).toHaveCSS("color-scheme", /dark/);
+  await expect(page.locator("html")).toHaveCSS("color-scheme", /light/);
   await page.goto("/dashboard/settings/errors/401");
   for (const code of ["403", "404", "500", "offline", "empty"]) {
     const link = page.getByRole("link", { name: code, exact: true });

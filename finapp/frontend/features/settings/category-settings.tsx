@@ -6,7 +6,7 @@ import { useFinance } from "@/features/finance/model/finance-context";
 import { Card } from "@/shared/ui/card";
 import { Field } from "@/shared/ui/field";
 import { PageHeader } from "@/shared/ui/page-header";
-import { buttonClass, inputClass } from "@/shared/ui/styles";
+import { buttonClass, formCardClass, inputClass } from "@/shared/ui/styles";
 
 export function CategorySettings() {
   const { state, dispatch } = useFinance();
@@ -20,5 +20,5 @@ export function CategorySettings() {
     setValue("");
     setError("");
   }
-  return <div className="space-y-6"><PageHeader title="Categorias" /><Card><ul className="divide-y divide-zinc-100 dark:divide-zinc-800">{state.categories.map((category) => <li className="py-3 text-sm" key={category}>{category}</li>)}</ul></Card><form onSubmit={submit} className="grid gap-3 rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950"><Field label="Nova categoria" error={error}><input className={inputClass} value={value} onChange={(event) => setValue(event.target.value)} required /></Field><button className={buttonClass}>Adicionar categoria</button></form></div>;
+  return <div className="space-y-6"><PageHeader title="Categorias" eyebrow="Organização" /><Card><div className="mb-4 flex items-center justify-between"><p className="text-sm text-muted">Categorias ativas</p><span className="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-secondary">{state.categories.length}</span></div><ul className="grid gap-3 sm:grid-cols-2">{state.categories.map((category, index) => <li className="flex min-h-14 items-center gap-3 rounded-xl border border-border-subtle bg-surface-subtle px-4 text-sm font-semibold" key={category}><span className={`size-2.5 rounded-full ${index % 2 === 0 ? "bg-primary" : "bg-secondary"}`} aria-hidden />{category}</li>)}</ul></Card><form onSubmit={submit} className={formCardClass}><Field label="Nova categoria" error={error}><input className={inputClass} value={value} onChange={(event) => setValue(event.target.value)} required /></Field><button className={`${buttonClass} w-full`}>Adicionar categoria</button></form></div>;
 }

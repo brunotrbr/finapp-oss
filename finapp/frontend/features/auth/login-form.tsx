@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import { authErrorMessage } from "@/features/auth/auth-errors";
 import { firebaseAuth, googleProvider } from "@/infrastructure/firebase/client";
+import { buttonClass, inputClass, secondaryButtonClass } from "@/shared/ui/styles";
 
 type Mode = "login" | "register" | "reset";
 
@@ -95,16 +96,16 @@ export function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-sm rounded-2xl border border-black/[.08] bg-white p-8 shadow-sm dark:border-white/[.145] dark:bg-zinc-950">
-      <h1 className="text-2xl font-semibold tracking-tight text-black dark:text-zinc-50">
+    <div className="w-full rounded-3xl border border-border-subtle bg-surface p-6 shadow-[0_24px_60px_-36px_rgba(15,118,110,0.55)] sm:p-8">
+      <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
         {mode === "login" ? "Entrar" : mode === "register" ? "Criar conta" : "Recuperar acesso"}
       </h1>
-      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-        Finapp Finances
+      <p className="mt-2 text-sm text-muted">
+        {mode === "login" ? "Bem-vindo de volta ao seu espaço financeiro." : mode === "register" ? "Comece com seus dados essenciais." : "Enviaremos instruções para o e-mail informado."}
       </p>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        <label className="flex flex-col gap-1.5 text-sm font-medium text-foreground">
           E-mail
           <input
             type="email"
@@ -113,11 +114,11 @@ export function LoginForm() {
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="rounded-lg border border-black/[.08] bg-transparent px-3 py-2 text-base text-black outline-none focus:border-zinc-500 dark:border-white/[.145] dark:text-zinc-50"
+            className={inputClass}
           />
         </label>
 
-        {mode !== "reset" && <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        {mode !== "reset" && <label className="flex flex-col gap-1.5 text-sm font-medium text-foreground">
           Senha
           <input
             type="password"
@@ -127,37 +128,37 @@ export function LoginForm() {
             minLength={6}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="rounded-lg border border-black/[.08] bg-transparent px-3 py-2 text-base text-black outline-none focus:border-zinc-500 dark:border-white/[.145] dark:text-zinc-50"
+            className={inputClass}
           />
         </label>}
 
         {error && (
-          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+          <p role="alert" className="rounded-xl bg-expense-container p-3 text-sm text-expense">
             {error}
           </p>
         )}
-        {message && <p role="status" className="text-sm text-zinc-700 dark:text-zinc-300">{message}</p>}
+        {message && <p role="status" className="rounded-xl bg-primary-container p-3 text-sm text-on-primary-container">{message}</p>}
 
         <button
           type="submit"
           disabled={pending}
-          className="h-11 rounded-full bg-foreground px-5 text-base font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
+          className={`${buttonClass} w-full text-base`}
         >
           {pending ? "Aguarde…" : mode === "login" ? "Entrar" : mode === "register" ? "Criar conta" : "Enviar instruções"}
         </button>
       </form>
 
-      {mode !== "reset" && <><div className="my-5 flex items-center gap-3 text-xs uppercase tracking-wide text-zinc-500">
-        <span className="h-px flex-1 bg-black/[.08] dark:bg-white/[.145]" />
+      {mode !== "reset" && <><div className="my-5 flex items-center gap-3 text-xs uppercase tracking-wide text-muted">
+        <span className="h-px flex-1 bg-border-subtle" />
         ou
-        <span className="h-px flex-1 bg-black/[.08] dark:bg-white/[.145]" />
+        <span className="h-px flex-1 bg-border-subtle" />
       </div>
 
       <button
         type="button"
         onClick={handleGoogle}
         disabled={pending}
-        className="h-11 w-full rounded-full border border-solid border-black/[.08] px-5 text-base font-medium transition-colors hover:bg-black/[.04] disabled:opacity-50 dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
+        className={`${secondaryButtonClass} w-full text-base`}
       >
         Continuar com Google
       </button>
@@ -170,11 +171,11 @@ export function LoginForm() {
           setError("");
           setMessage("");
         }}
-        className="mt-6 min-h-11 w-full text-sm text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-400"
+        className="mt-6 min-h-11 w-full text-sm font-semibold text-primary underline-offset-4 hover:underline"
       >
         {mode === "login" ? "Ainda não tem conta? Cadastre-se" : "Voltar para entrar"}
       </button>
-      {mode === "login" && <button type="button" onClick={() => { setMode("reset"); setError(""); setMessage(""); }} className="mt-3 min-h-11 w-full text-sm font-medium text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-400">Esqueci minha senha</button>}
+      {mode === "login" && <button type="button" onClick={() => { setMode("reset"); setError(""); setMessage(""); }} className="mt-1 min-h-11 w-full text-sm font-medium text-muted underline-offset-4 hover:text-primary hover:underline">Esqueci minha senha</button>}
     </div>
   );
 }

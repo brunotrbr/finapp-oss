@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;min-height:100vh;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed": "#261900",
+          "surface-container": "#efeeea",
+          "on-tertiary-fixed": "#001551",
+          "on-tertiary-fixed-variant": "#0039b5",
+          "outline": "#757682",
+          "on-error-container": "#93000a",
+          "surface-dim": "#dbdad6",
+          "surface-variant": "#e4e2de",
+          "primary-container": "#1e3a8a",
+          "background": "#fbf9f5",
+          "on-secondary-fixed-variant": "#5d4201",
+          "outline-variant": "#c5c5d3",
+          "on-background": "#1b1c1a",
+          "error": "#ba1a1a",
+          "on-primary-fixed": "#00164e",
+          "on-surface-variant": "#52576b",
+          "surface-container-high": "#eae8e4",
+          "tertiary-container": "#0033a6",
+          "surface": "#fbf9f5",
+          "primary-fixed-dim": "#b6c4ff",
+          "on-primary-container": "#90a8ff",
+          "tertiary-fixed-dim": "#b7c4ff",
+          "on-error": "#ffffff",
+          "on-secondary-container": "#785a1a",
+          "inverse-surface": "#30312e",
+          "surface-container-low": "#f5f3ef",
+          "on-primary": "#ffffff",
+          "secondary-fixed": "#ffdea5",
+          "inverse-on-surface": "#f2f0ed",
+          "surface-container-lowest": "#ffffff",
+          "tertiary": "#002173",
+          "secondary": "#b45309",
+          "secondary-fixed-dim": "#e9c176",
+          "primary": "#1e3a8a",
+          "on-tertiary-container": "#92a7ff",
+          "error-container": "#ffdad6",
+          "surface-tint": "#4059aa",
+          "surface-container-highest": "#e4e2de",
+          "primary-fixed": "#dce1ff",
+          "on-tertiary": "#ffffff",
+          "secondary-container": "#fed488",
+          "on-primary-fixed-variant": "#264191",
+          "inverse-primary": "#b6c4ff",
+          "tertiary-fixed": "#dce1ff",
+          "on-surface": "#0f172a",
+          "surface-bright": "#fbf9f5"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-md": "1rem",
+          "margin-mobile": "1.25rem",
+          "space-sm": "0.5rem",
+          "space-xl": "2.5rem",
+          "space-lg": "1.5rem",
+          "gutter-mobile": "1rem",
+          "gutter": "1.5rem",
+          "margin": "1rem",
+          "space-xs": "0.25rem"
+        },
+        "fontFamily": {
+          "numeric-stat": ["Plus Jakarta Sans"],
+          "label-sm": ["Plus Jakarta Sans"],
+          "headline-lg": ["Plus Jakarta Sans"],
+          "headline-xl": ["Plus Jakarta Sans"],
+          "headline-xl-mobile": ["Plus Jakarta Sans"],
+          "body-sm": ["Plus Jakarta Sans"],
+          "body-lg": ["Plus Jakarta Sans"],
+          "label-md": ["Plus Jakarta Sans"],
+          "headline-md": ["Plus Jakarta Sans"],
+          "body-md": ["Plus Jakarta Sans"],
+          "headline-lg-mobile": ["Plus Jakarta Sans"],
+          "headline-sm": ["Plus Jakarta Sans"],
+          "label-lg": ["Plus Jakarta Sans"],
+          "currency-display": ["Plus Jakarta Sans"]
+        },
+        "fontSize": {
+          "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+          "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+          "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }],
+          "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+          "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+          "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+          "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+          "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+          "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+          "currency-display": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+        }
+      }
+    }
+  };
+</script></head><body class="bg-[#fbf9f5] font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-[#fbf9f5]/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(30,58,138,0.04)] border-b border-surface-container-high/50 pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] text-[#fef3c7] flex items-center justify-center shadow-sm flex-shrink-0"><span class="material-symbols-outlined text-[18px]">account_balance_wallet</span></div><div class="flex flex-col min-w-0"><button class="flex items-center gap-space-xs text-left group" type="button"><span class="font-label-md text-label-md text-on-surface-variant leading-none truncate">Meu Espaço</span><span class="material-symbols-outlined text-[16px] text-on-surface-variant transition-transform group-hover:translate-y-0.5">expand_more</span></button><h1 class="font-headline-sm text-headline-sm text-on-surface truncate leading-tight font-bold">Contas</h1></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Perfil" class="w-11 h-11 flex items-center justify-center rounded-full active:opacity-80 transition-opacity" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-[#e9c176]/50 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADM7lYl3ZJg3VAVrLtokIBlrrtCOptnOnGVIA0bmz3j9LgfefNxpSRYfruPnkg8mPpmeHs_YhNYFiZ0C5KvL7VmOLtF1ruUFl2tlOAdSQz9ok2bqCuVtxXhar2ch_Mq6axxUdfYE3_ADt_H18xZDY9-JRb4roAGaR20CU90fzO0sQvmoxaD92GZdckejQak0xPYin-Mb8C1ugO0FqI1ll-y0FpeEy7r733_lo-_SaCY8XdG2ZnfqZ3mQ"/></button></div></div></header><main class="flex flex-col relative w-full pt-16 pb-28 bg-[#fbf9f5] px-margin"><div class="flex flex-col w-full gap-5 pb-12">
+<!-- Internal Action Header -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#b45309] font-semibold uppercase tracking-wider">Visão Geral</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">Minhas Contas</h2>
+</div>
+<button class="h-10 px-4 bg-gradient-to-r from-[#1e3a8a] to-[#172554] active:opacity-90 text-white rounded-xl flex items-center gap-space-xs font-label-lg text-label-lg shadow-sm shadow-blue-900/20 transition-all active:scale-95 border border-[#1e3a8a]/30" type="button">
+<span class="material-symbols-outlined text-[18px] text-[#fde68a]">add_circle</span>
+<span class="font-semibold text-[13px]">Nova Conta</span>
+</button>
+</div>
+<!-- Quick Net Worth Overview Micro-Pill -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex items-center justify-between border border-[#e4e2de] relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#d97706] to-[#1e3a8a]"></div>
+<div class="flex items-center gap-space-md pl-1">
+<div class="w-10 h-10 rounded-xl bg-[#fef3c7] text-[#b45309] border border-[#fde68a] flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Saldo consolidado em contas</span>
+<span class="font-headline-sm text-headline-sm text-[#1e3a8a] font-bold">R$ 14.285,40</span>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-[#fef3c7] text-[#92400e] border border-[#fde68a] px-2.5 py-1 rounded-full font-semibold">
+<span class="material-symbols-outlined text-[14px] text-[#d97706]">trending_up</span>
+<span class="font-label-md text-label-md text-[#78350f]">Ativo</span>
+</div>
+</div>
+<!-- Bank Accounts Section -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Contas Bancárias</span>
+<span class="bg-[#f0ece1] text-[#1e3a8a] border border-[#e4e2de] px-2 py-0.5 rounded-full font-label-md text-label-md font-bold">3</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Liquidez imediata</span>
+</div>
+<!-- Account Card 1: Nubank -->
+<div class="group bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm active:shadow-none transition-all flex flex-col gap-space-md cursor-pointer hover:border-[#1e3a8a]/30 border border-[#eae8e4]" role="button" tabindex="0">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-purple-50 text-[#820AD1] border border-purple-100 flex items-center justify-center font-label-lg font-bold">
+<span class="material-symbols-outlined text-[26px]">payments</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-label-lg text-label-lg text-on-surface font-semibold group-hover:text-[#1e3a8a] transition-colors">Nubank Principal</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Nu Pagamentos S.A.</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform group-hover:text-[#1e3a8a]">chevron_right</span>
+</div>
+<div class="flex items-baseline justify-between pt-space-xs border-t border-[#f5f3ef]">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Saldo disponível</span>
+<span class="font-currency-display text-currency-display text-on-surface font-bold tracking-tight">R$ 4.850,20</span>
+</div>
+<div class="flex items-center gap-1 text-[#b45309] font-label-md text-label-md group-hover:underline">
+<span class="font-semibold">Ver extrato</span>
+</div>
+</div>
+</div>
+<!-- Account Card 2: Itaú Reserva -->
+<div class="group bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm active:shadow-none transition-all flex flex-col gap-space-md cursor-pointer hover:border-[#1e3a8a]/30 border border-[#eae8e4]" role="button" tabindex="0">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-amber-50 text-[#d97706] border border-amber-100 flex items-center justify-center font-label-lg font-bold">
+<span class="material-symbols-outlined text-[26px]">savings</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-label-lg text-label-lg text-on-surface font-semibold group-hover:text-[#1e3a8a] transition-colors">Itaú Reserva</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Banco Itaú Unibanco</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform group-hover:text-[#1e3a8a]">chevron_right</span>
+</div>
+<div class="flex items-baseline justify-between pt-space-xs border-t border-[#f5f3ef]">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Saldo disponível</span>
+<span class="font-currency-display text-currency-display text-on-surface font-bold tracking-tight">R$ 8.120,00</span>
+</div>
+<div class="flex items-center gap-1 text-[#b45309] font-label-md text-label-md group-hover:underline">
+<span class="font-semibold">Ver extrato</span>
+</div>
+</div>
+</div>
+<!-- Account Card 3: Inter PJ -->
+<div class="group bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm active:shadow-none transition-all flex flex-col gap-space-md cursor-pointer hover:border-[#1e3a8a]/30 border border-[#eae8e4]" role="button" tabindex="0">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-orange-50 text-[#ea580c] border border-orange-100 flex items-center justify-center font-label-lg font-bold">
+<span class="material-symbols-outlined text-[26px]">storefront</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h3 class="font-label-lg text-label-lg text-on-surface font-semibold group-hover:text-[#1e3a8a] transition-colors">Inter PJ</h3>
+<span class="bg-[#f0ece1] text-[#1e3a8a] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#e4e2de]">PJ</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Banco Inter S.A.</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform group-hover:text-[#1e3a8a]">chevron_right</span>
+</div>
+<div class="flex items-baseline justify-between pt-space-xs border-t border-[#f5f3ef]">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Saldo disponível</span>
+<span class="font-currency-display text-currency-display text-on-surface font-bold tracking-tight">R$ 1.315,20</span>
+</div>
+<div class="flex items-center gap-1 text-[#b45309] font-label-md text-label-md group-hover:underline">
+<span class="font-semibold">Ver extrato</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Credit Cards Section -->
+<div class="flex flex-col gap-3 pt-space-xs">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Cartões de Crédito</span>
+<span class="bg-[#f0ece1] text-[#1e3a8a] border border-[#e4e2de] px-2 py-0.5 rounded-full font-label-md text-label-md font-bold">2</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Faturas abertas</span>
+</div>
+<!-- Credit Card 1: Mastercard Black in Sovereign Royal Deep Blue Gradient -->
+<div class="group relative overflow-hidden bg-gradient-to-br from-[#172554] via-[#1e3a8a] to-[#0f172a] text-white rounded-2xl p-space-lg shadow-lg shadow-blue-950/20 transition-all active:scale-[0.99] cursor-pointer border border-[#d97706]/30" role="button" tabindex="0">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-[#d97706]/15 rounded-full blur-2xl pointer-events-none"></div>
+<div class="absolute right-12 bottom-0 w-32 h-32 bg-[#3b82f6]/20 rounded-full blur-xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-space-lg">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-[#fde68a]/30 flex items-center justify-center text-[#fde68a]">
+<span class="material-symbols-outlined text-[24px]">credit_card</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">Nubank Mastercard Black</h3>
+<span class="font-body-sm text-body-sm text-[#bfdbfe]">Final •••• 8842</span>
+</div>
+</div>
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-[#d97706]/20 transition-colors">
+<span class="material-symbols-outlined text-[#fde68a] group-hover:translate-x-0.5 transition-transform text-[20px]">arrow_forward</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 bg-black/25 backdrop-blur-md p-space-md rounded-xl border border-white/10">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-[#fde68a] font-bold tracking-wide uppercase flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-[#f59e0b] animate-pulse"></span>
+              Fatura Atual (Compromisso)
+            </span>
+<span class="font-body-sm text-body-sm text-[#bfdbfe]/90">Limite flexível</span>
+</div>
+<span class="font-display-lg text-display-lg text-white font-bold tracking-tight text-[28px] leading-tight">R$ 2.340,50</span>
+<span class="font-body-sm text-body-sm text-[#bfdbfe]/80 text-[11px] leading-relaxed">Este valor não é saldo em conta. Pagamento previsto via débito ou boleto.</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-[#bfdbfe] font-label-md text-label-md">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-[#fde68a]">event</span>
+<span>Vence em <strong class="text-white font-semibold">15/Nov</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-[#fde68a]">check_circle</span>
+<span>Melhor dia: <strong class="text-white font-semibold">08</strong></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Credit Card 2: XP Visa Infinite in Royal Midnight Blue with Champagne Accents -->
+<div class="group relative overflow-hidden bg-gradient-to-br from-[#1e293b] via-[#1e3a8a]/90 to-[#0b132b] text-white rounded-2xl p-space-lg shadow-lg shadow-slate-950/20 transition-all active:scale-[0.99] cursor-pointer border border-[#f59e0b]/25" role="button" tabindex="0">
+<div class="absolute -right-10 -bottom-10 w-44 h-44 bg-[#f59e0b]/10 rounded-full blur-xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-space-lg">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-[#fde68a]/30 flex items-center justify-center text-[#fde68a]">
+<span class="material-symbols-outlined text-[24px]">contactless</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">XP Visa Infinite</h3>
+<span class="font-body-sm text-body-sm text-[#bfdbfe]">Investback Ativo</span>
+</div>
+</div>
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-[#d97706]/20 transition-colors">
+<span class="material-symbols-outlined text-[#fde68a] group-hover:translate-x-0.5 transition-transform text-[20px]">arrow_forward</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 bg-black/25 backdrop-blur-md p-space-md rounded-xl border border-white/10">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-[#fde68a] font-bold tracking-wide uppercase flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span>
+              Fatura Atual (Compromisso)
+            </span>
+<span class="font-body-sm text-body-sm text-[#bfdbfe]/90">Disponível: R$ 18.420</span>
+</div>
+<span class="font-display-lg text-display-lg text-white font-bold tracking-tight text-[28px] leading-tight">R$ 1.180,00</span>
+<span class="font-body-sm text-body-sm text-[#bfdbfe]/80 text-[11px] leading-relaxed">Compromisso futuro. Vencimento regular sem encargos.</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-[#bfdbfe] font-label-md text-label-md">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-[#fde68a]">event</span>
+<span>Vence em <strong class="text-white font-semibold">25/Nov</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-[#fde68a]">check_circle</span>
+<span>Melhor dia: <strong class="text-white font-semibold">18</strong></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Ergonomic Floating Action Trigger (Sticky above bottom nav) -->
+<div class="fixed bottom-20 right-4 z-40"><button aria-label="Novo Lançamento" class="h-14 px-5 bg-gradient-to-r from-[#1e3a8a] to-[#1d4ed8] text-white rounded-full shadow-xl shadow-blue-900/35 flex items-center gap-space-sm active:scale-95 transition-all hover:brightness-110 border border-[#93c5fd]/30" type="button">
+<span class="material-symbols-outlined text-[24px] text-[#fde68a]">add</span>
+<span class="font-label-lg text-label-lg tracking-wide font-bold">Novo Lançamento</span>
+</button></div>
+</div>
+<script>
+  // Simple micro-interaction feedback on card selection
+  document.querySelectorAll('[role="button"]').forEach(card => {
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-[#fbf9f5]/95 backdrop-blur-xl border-t border-[#e4e2de] shadow-[0_-2px_12px_rgba(30,58,138,0.05)]" data-active-classes="text-[#1e3a8a] font-label-md"><div class="flex justify-around items-center h-16 px-space-md"><a aria-current="page" class="flex flex-col items-center justify-center gap-1 min-w-[56px] min-h-[44px] py-1 transition-colors text-[#1e3a8a] font-bold" data-path="contas" href="#"><span class="material-symbols-outlined text-[24px]">account_balance_wallet</span><span class="font-label-md text-label-md leading-none">Contas</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-[#1e3a8a] transition-colors" data-path="categorias" href="#"><span class="material-symbols-outlined text-[24px]">label</span><span class="font-label-md text-label-md leading-none">Categorias</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-[#1e3a8a] transition-colors" data-path="configuracoes" href="#"><span class="material-symbols-outlined text-[24px]">settings</span><span class="font-label-md text-label-md leading-none">Ajustes</span></a></div></nav>
+</body></html>

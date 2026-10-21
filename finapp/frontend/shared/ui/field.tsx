@@ -21,5 +21,5 @@ export function Field({ label, error, children }: { label: string; error?: strin
       })
     : children;
 
-  return <div className="grid gap-1.5 text-sm font-medium"><label htmlFor={isValidElement<FieldControlProps>(control) ? control.props.id : undefined}>{label}</label>{control}{error && <span id={errorId} role="alert" className="text-sm text-red-600 dark:text-red-400">{error}</span>}</div>;
+  return <div className="grid gap-1.5 text-sm font-medium text-foreground"><label htmlFor={isValidElement<FieldControlProps>(control) ? control.props.id : undefined}>{label}</label>{control}{error && <span id={errorId} role="alert" className="text-sm text-expense">{error}</span>}</div>;
 }

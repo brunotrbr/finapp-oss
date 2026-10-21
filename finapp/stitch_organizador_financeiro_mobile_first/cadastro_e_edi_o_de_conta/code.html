@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;min-height:100vh;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed": "#261900",
+          "surface-container": "#efeeea",
+          "on-tertiary-fixed": "#001551",
+          "on-tertiary-fixed-variant": "#0039b5",
+          "outline": "#757682",
+          "on-error-container": "#93000a",
+          "surface-dim": "#dbdad6",
+          "surface-variant": "#e4e2de",
+          "primary-container": "#1e3a8a",
+          "background": "#fbf9f5",
+          "on-secondary-fixed-variant": "#5d4201",
+          "outline-variant": "#c5c5d3",
+          "on-background": "#1b1c1a",
+          "error": "#ba1a1a",
+          "on-primary-fixed": "#00164e",
+          "on-surface-variant": "#444651",
+          "surface-container-high": "#eae8e4",
+          "tertiary-container": "#0033a6",
+          "surface": "#fbf9f5",
+          "primary-fixed-dim": "#b6c4ff",
+          "on-primary-container": "#90a8ff",
+          "tertiary-fixed-dim": "#b7c4ff",
+          "on-error": "#ffffff",
+          "on-secondary-container": "#785a1a",
+          "inverse-surface": "#30312e",
+          "surface-container-low": "#f5f3ef",
+          "on-primary": "#ffffff",
+          "secondary-fixed": "#ffdea5",
+          "inverse-on-surface": "#f2f0ed",
+          "surface-container-lowest": "#ffffff",
+          "tertiary": "#002173",
+          "secondary": "#775a19",
+          "secondary-fixed-dim": "#e9c176",
+          "primary": "#00236f",
+          "on-tertiary-container": "#92a7ff",
+          "error-container": "#ffdad6",
+          "surface-tint": "#4059aa",
+          "surface-container-highest": "#e4e2de",
+          "primary-fixed": "#dce1ff",
+          "on-tertiary": "#ffffff",
+          "secondary-container": "#fed488",
+          "on-primary-fixed-variant": "#264191",
+          "inverse-primary": "#b6c4ff",
+          "tertiary-fixed": "#dce1ff",
+          "on-surface": "#1b1c1a",
+          "surface-bright": "#fbf9f5"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-md": "1rem",
+          "margin-mobile": "1.25rem",
+          "space-sm": "0.5rem",
+          "space-xl": "2.5rem",
+          "space-lg": "1.5rem",
+          "gutter-mobile": "1rem",
+          "gutter": "1.5rem",
+          "margin": "1rem",
+          "space-xs": "0.25rem"
+        },
+        "fontFamily": {
+          "numeric-stat": ["Plus Jakarta Sans"],
+          "label-sm": ["Plus Jakarta Sans"],
+          "headline-lg": ["Plus Jakarta Sans"],
+          "headline-xl": ["Plus Jakarta Sans"],
+          "headline-xl-mobile": ["Plus Jakarta Sans"],
+          "body-sm": ["Plus Jakarta Sans"],
+          "body-lg": ["Plus Jakarta Sans"],
+          "label-md": ["Plus Jakarta Sans"],
+          "headline-md": ["Plus Jakarta Sans"],
+          "body-md": ["Plus Jakarta Sans"],
+          "headline-lg-mobile": ["Plus Jakarta Sans"],
+          "headline-sm": ["Plus Jakarta Sans"],
+          "label-lg": ["Plus Jakarta Sans"]
+        },
+        "fontSize": {
+          "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+          "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+          "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+          "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+          "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+          "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+          "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }],
+          "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+          "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+          "currency-display": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+        }
+      }
+    }
+  };
+</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl border-b border-surface-container-high/60 shadow-[0_1px_6px_rgba(0,0,0,0.02)] pt-safe"><div class="h-16 px-space-sm flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0 flex-1"><button aria-label="Voltar" class="w-11 h-11 flex items-center justify-center text-on-surface rounded-full active:bg-surface-container-high transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="FinFlow Logo" class="h-7 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1VAFadqF7p-FwvUAK83Pki0eiXyf4H32x-yIzOnW16dnEOI-wg0kZWZ4YkaKhkpmIDCAAp7FbB4tO0Ck-4pybFvmXTJ8K-jxQGeVazzGmYf5buEfNm0cMOTpVaxfiin7eWjNonfjjxVdM1EzimeG85ZLI_ybZXc_63rSiawDAhqEZkzUCiSOPRlj4LhS-LB1GsM574lHvFJd9a_ZqOXWSvinj0YeQNvaAdbcpewsG47niUboCof35x2YRxC"/><div class="flex flex-col min-w-0 pl-1"><span class="font-label-md text-label-md text-secondary font-medium leading-none truncate">Meu Espaço</span><h1 class="font-headline-sm text-headline-sm text-primary truncate leading-tight font-bold">Nova Transacao</h1></div></div><div class="flex items-center pr-space-sm flex-shrink-0"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-secondary/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADM7lYl3ZJg3VAVrLtokIBlrrtCOptnOnGVIA0bmz3j9LgfefNxpSRYfruPnkg8mPpmeHs_YhNYFiZ0C5KvL7VmOLtF1ruUFl2tlOAdSQz9ok2bqCuVtxXhar2ch_Mq6axxUdfYE3_ADt_H18xZDY9-JRb4roAGaR20CU90fzO0sQvmoxaD92GZdckejQak0xPYin-Mb8C1ugO0FqI1ll-y0FpeEy7r733_lo-_SaCY8XdG2ZnfqZ3mQ"/></div></div></header><main class="flex flex-col relative w-full pt-16 pb-safe bg-surface px-margin"><div class="flex flex-col w-full pb-8">
+<!-- Top Modal Context Bar -->
+<div class="flex items-center justify-between py-space-sm mb-space-md">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">Configurar Conta</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container/40 text-secondary border border-secondary/20 font-label-md text-label-md font-semibold" id="mode-badge">Nova</span>
+</div>
+<button aria-label="Fechar" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low border border-surface-container-high text-on-surface hover:bg-surface-container active:scale-95 transition-transform" onclick="history.back()" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Segmented Control: Account Type (Royal Blue & Champagne styling) -->
+<div class="bg-surface-container-low p-1.5 rounded-xl border border-surface-container-high/80 flex items-center gap-1.5 shadow-sm">
+<button class="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg font-label-lg text-label-lg transition-all duration-200 bg-primary-container text-on-primary shadow-sm" id="tab-bank" onclick="switchAccountType('bank')" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+<span class="font-semibold">Conta Bancária</span>
+</button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg font-label-lg text-label-lg transition-all duration-200 text-on-surface-variant hover:text-on-surface" id="tab-credit" onclick="switchAccountType('credit')" type="button">
+<span class="material-symbols-outlined text-[18px]">credit_card</span>
+<span class="font-medium">Cartão de Crédito</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2 px-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">info</span>
+    A escolha do tipo define as regras de saldo, limites e apuração de faturas.
+  </p>
+<!-- Form Wrapper -->
+<form class="flex flex-col gap-space-md mt-space-md" id="account-form" onsubmit="event.preventDefault(); showSuccessFeedback();">
+<!-- Bank Institution Selector Card -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/80 shadow-sm flex flex-col gap-space-sm">
+<label class="font-label-md text-label-md text-on-surface-variant font-semibold" for="bank-institution">Instituição Financeira</label>
+<div class="relative">
+<div class="w-full h-12 flex items-center justify-between px-3 bg-surface-container-low border border-surface-container-high rounded-lg cursor-pointer select-none transition-colors hover:border-secondary/40" onclick="toggleBankDropdown()">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-7 h-7 rounded-full bg-[#820ad1] text-white flex items-center justify-center text-xs font-bold flex-shrink-0 shadow-xs" id="selected-bank-avatar">
+              Nu
+            </div>
+<span class="font-body-md text-body-md text-on-surface font-medium truncate" id="selected-bank-name">Nubank (Nu Pagamentos S.A.)</span>
+</div>
+<span class="material-symbols-outlined text-secondary transition-transform" id="bank-dropdown-icon">expand_more</span>
+</div>
+<!-- Custom Dropdown Menu -->
+<div class="hidden absolute top-14 left-0 right-0 z-30 bg-surface-container-lowest border border-surface-container-high rounded-xl shadow-lg p-1.5 flex flex-col gap-1 max-h-56 overflow-y-auto" id="bank-dropdown-options">
+<button class="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors text-left" onclick="selectBank('Nubank (Nu Pagamentos S.A.)', '#820ad1', 'Nu')" type="button">
+<div class="w-7 h-7 rounded-full bg-[#820ad1] text-white flex items-center justify-center text-xs font-bold">Nu</div>
+<span class="font-body-md text-body-md text-on-surface">Nubank</span>
+</button>
+<button class="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors text-left" onclick="selectBank('Itaú Unibanco S.A.', '#ec7000', 'It')" type="button">
+<div class="w-7 h-7 rounded-full bg-[#ec7000] text-white flex items-center justify-center text-xs font-bold">It</div>
+<span class="font-body-md text-body-md text-on-surface">Itaú</span>
+</button>
+<button class="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors text-left" onclick="selectBank('Banco Inter S.A.', '#ff7a00', 'In')" type="button">
+<div class="w-7 h-7 rounded-full bg-[#ff7a00] text-white flex items-center justify-center text-xs font-bold">In</div>
+<span class="font-body-md text-body-md text-on-surface">Banco Inter</span>
+</button>
+<button class="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors text-left" onclick="selectBank('Banco Santander Brasil', '#cc0000', 'Sa')" type="button">
+<div class="w-7 h-7 rounded-full bg-[#cc0000] text-white flex items-center justify-center text-xs font-bold">Sa</div>
+<span class="font-body-md text-body-md text-on-surface">Santander</span>
+</button>
+<button class="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors text-left" onclick="selectBank('Banco Bradesco S.A.', '#cc092f', 'Br')" type="button">
+<div class="w-7 h-7 rounded-full bg-[#cc092f] text-white flex items-center justify-center text-xs font-bold">Br</div>
+<span class="font-body-md text-body-md text-on-surface">Bradesco</span>
+</button>
+<button class="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors text-left" onclick="selectBank('Outra Instituição', '#444651', 'Ou')" type="button">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center text-xs font-bold">Ou</div>
+<span class="font-body-md text-body-md text-on-surface">Outra Instituição / Carteira</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Account Name Field -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/80 shadow-sm flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant font-semibold" for="account-name">Nome de Identificação</label>
+<input class="w-full h-12 px-3 bg-surface-container-low border border-surface-container-high rounded-lg font-body-lg text-body-lg text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary-container focus:bg-surface-container-lowest transition-colors" id="account-name" placeholder="Ex: Nubank Principal, Itaú Reserva" type="text" value="Nubank Principal"/>
+</div>
+<!-- BANK-SPECIFIC SECTION -->
+<div class="flex flex-col gap-space-md" id="section-bank-fields">
+<!-- Sub-type Chips (Royal Blue & Champagne) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/80 shadow-sm flex flex-col gap-space-sm">
+<label class="font-label-md text-label-md text-on-surface-variant font-semibold">Modalidade da Conta</label>
+<div class="flex flex-wrap gap-2">
+<button class="subtype-chip px-3 py-2 rounded-full font-label-md text-label-md transition-all duration-150 bg-primary-container text-on-primary shadow-xs font-semibold" onclick="selectSubtype(this)" type="button">
+            Conta Corrente
+          </button>
+<button class="subtype-chip px-3 py-2 rounded-full font-label-md text-label-md transition-all duration-150 bg-surface-container-low border border-surface-container-high text-on-surface-variant hover:text-on-surface hover:border-secondary/30" onclick="selectSubtype(this)" type="button">
+            Poupança
+          </button>
+<button class="subtype-chip px-3 py-2 rounded-full font-label-md text-label-md transition-all duration-150 bg-surface-container-low border border-surface-container-high text-on-surface-variant hover:text-on-surface hover:border-secondary/30" onclick="selectSubtype(this)" type="button">
+            Investimento / Reserva
+          </button>
+</div>
+</div>
+<!-- Initial Balance Input -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/80 shadow-sm flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface-variant font-semibold" for="initial-balance">Saldo Inicial</label>
+<span class="font-label-md text-label-md text-secondary font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+  Positivo (+)
+</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-low border border-surface-container-high rounded-lg focus-within:bg-surface-container-lowest focus-within:border-secondary/60 transition-colors">
+<span class="font-currency-display text-currency-display text-secondary font-bold">R$</span>
+<input class="w-full bg-transparent font-currency-display text-currency-display text-primary font-bold focus:outline-none tracking-tight" id="initial-balance" placeholder="0,00" type="text" value="3.450,80"/>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-tight">
+          Informe quanto havia nesta conta antes dos lançamentos registrados no aplicativo.
+        </p>
+</div>
+</div>
+<!-- CREDIT CARD-SPECIFIC SECTION (Dynamic Display) -->
+<div class="hidden flex flex-col gap-space-md" id="section-credit-fields">
+<!-- Credit Card Limit -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/80 shadow-sm flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant font-semibold" for="credit-limit">Limite Total de Crédito</label>
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-low border border-surface-container-high rounded-lg focus-within:bg-surface-container-lowest focus-within:border-secondary/60 transition-colors">
+<span class="font-currency-display text-currency-display text-secondary font-bold">R$</span>
+<input class="w-full bg-transparent font-currency-display text-currency-display text-primary font-bold focus:outline-none tracking-tight" id="credit-limit" placeholder="0,00" type="text" value="8.000,00"/>
+</div>
+</div>
+<!-- Statement Dates Picker Grid -->
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- Closing Day -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/80 shadow-sm flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant font-semibold" for="closing-day">Dia do Fechamento</label>
+<div class="relative flex items-center">
+<select class="w-full h-11 px-3 bg-surface-container-low border border-surface-container-high rounded-lg font-label-lg text-label-lg text-on-surface appearance-none focus:outline-none focus:border-secondary/60" id="closing-day">
+<option value="5">Dia 05</option>
+<option selected="" value="8">Dia 08 (Melhor dia)</option>
+<option value="12">Dia 12</option>
+<option value="15">Dia 15</option>
+<option value="20">Dia 20</option>
+<option value="25">Dia 25</option>
+</select>
+<span class="material-symbols-outlined text-secondary absolute right-2 pointer-events-none text-[20px]">calendar_month</span>
+</div>
+<span class="font-body-sm text-body-sm text-secondary font-medium">Melhor data p/ compra</span>
+</div>
+<!-- Due Day -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/80 shadow-sm flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant font-semibold" for="due-day">Vencimento da Fatura</label>
+<div class="relative flex items-center">
+<select class="w-full h-11 px-3 bg-surface-container-low border border-surface-container-high rounded-lg font-label-lg text-label-lg text-on-surface appearance-none focus:outline-none focus:border-secondary/60" id="due-day">
+<option value="5">Dia 05</option>
+<option value="10">Dia 10</option>
+<option selected="" value="15">Dia 15</option>
+<option value="20">Dia 20</option>
+<option value="25">Dia 25</option>
+<option value="28">Dia 28</option>
+</select>
+<span class="material-symbols-outlined text-secondary absolute right-2 pointer-events-none text-[20px]">event_upcoming</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Vencimento mensal</span>
+</div>
+</div>
+<!-- Credit Card Interactive Preview -->
+<div class="bg-gradient-to-br from-[#00236f] via-[#1e3a8a] to-[#001551] text-white p-space-md rounded-2xl shadow-md border border-secondary/20 flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-secondary/15 pointer-events-none blur-sm"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-secondary-fixed">contactless</span>
+<span class="font-label-lg text-label-lg font-semibold" id="preview-bank-label">Nubank Platinum</span>
+</div>
+<span class="material-symbols-outlined text-[24px] text-secondary-fixed">credit_card</span>
+</div>
+<div class="flex flex-col gap-0.5 my-1">
+<span class="font-body-sm text-body-sm text-primary-fixed opacity-90">Limite disponível simulado</span>
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-white">R$ 8.000,00</span>
+</div>
+<div class="flex items-center justify-between text-secondary-fixed-dim font-body-sm text-body-sm pt-2 border-t border-white/10">
+<span class="">Fecha dia <strong class="text-white" id="preview-closing">08</strong></span>
+<span class="">Vence dia <strong class="text-white" id="preview-due">15</strong></span>
+</div>
+</div>
+<!-- Informative Notice Box -->
+<div class="p-space-md rounded-xl bg-surface-container-low border border-secondary/20 flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">verified_user</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Faturas e compras parceladas serão calculadas automaticamente com base no fechamento da fatura informada acima.
+        </p>
+</div>
+</div>
+<!-- Appearance & Styling (Color & Icon) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/80 shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface-variant font-semibold">Personalização Visual</label>
+<span class="font-body-sm text-body-sm text-secondary font-medium">Cor da tag</span>
+</div>
+<!-- Swatches -->
+<div class="flex items-center justify-between gap-2">
+<button class="color-swatch w-9 h-9 rounded-full bg-[#820ad1] flex items-center justify-center text-white scale-110 shadow-sm ring-2 ring-secondary/50 transition-transform" onclick="selectColor(this, '#820ad1')" type="button">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+<button class="color-swatch w-9 h-9 rounded-full bg-[#ec7000] flex items-center justify-center text-white transition-transform" onclick="selectColor(this, '#ec7000')" type="button">
+<span class="material-symbols-outlined text-[16px] hidden">check</span>
+</button>
+<button class="color-swatch w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-white transition-transform" onclick="selectColor(this, '#775a19')" type="button">
+<span class="material-symbols-outlined text-[16px] hidden">check</span>
+</button>
+<button class="color-swatch w-9 h-9 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white transition-transform" onclick="selectColor(this, '#1e3a8a')" type="button">
+<span class="material-symbols-outlined text-[16px] hidden">check</span>
+</button>
+<button class="color-swatch w-9 h-9 rounded-full bg-[#00236f] flex items-center justify-center text-white transition-transform" onclick="selectColor(this, '#00236f')" type="button">
+<span class="material-symbols-outlined text-[16px] hidden">check</span>
+</button>
+<button class="color-swatch w-9 h-9 rounded-full bg-[#ba1a1a] flex items-center justify-center text-white transition-transform" onclick="selectColor(this, '#ba1a1a')" type="button">
+<span class="material-symbols-outlined text-[16px] hidden">check</span>
+</button>
+</div>
+</div>
+<!-- Main Sticky / Anchored Form Actions -->
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 h-12 flex items-center justify-center rounded-lg bg-surface-container-low border border-surface-container-high text-on-surface font-label-lg text-label-lg active:scale-98 transition-transform font-medium hover:bg-surface-container" onclick="history.back()" type="button">
+        Cancelar
+      </button>
+<button class="flex-[2] h-12 flex items-center justify-center gap-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:opacity-95 active:scale-98 transition-all font-semibold" type="submit">
+<span class="material-symbols-outlined text-[20px]">check</span>
+<span class="">Salvar Conta</span>
+</button>
+</div>
+<!-- Danger Zone: Deletion -->
+<div class="mt-space-md pt-space-sm flex flex-col items-center gap-2">
+<button class="inline-flex items-center gap-1.5 py-2 px-4 rounded-lg text-error hover:bg-error-container/20 transition-colors font-label-lg text-label-lg font-semibold" onclick="handleDeleteConfirmation()" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span class="">Excluir conta</span>
+</button>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center max-w-xs leading-tight">
+        Contas com lançamentos vinculados exigirão confirmação adicional para preservar a integridade do extrato.
+      </p>
+</div>
+</form>
+<!-- Interactive Local State Scripts -->
+<script>
+    function switchAccountType(type) {
+      const bankTab = document.getElementById('tab-bank');
+      const creditTab = document.getElementById('tab-credit');
+      const bankFields = document.getElementById('section-bank-fields');
+      const creditFields = document.getElementById('section-credit-fields');
+
+      if (type === 'bank') {
+        bankTab.className = "flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg font-label-lg text-label-lg transition-all duration-200 bg-primary-container text-on-primary shadow-sm font-semibold";
+        creditTab.className = "flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg font-label-lg text-label-lg transition-all duration-200 text-on-surface-variant hover:text-on-surface font-medium";
+        bankFields.classList.remove('hidden');
+        creditFields.classList.add('hidden');
+      } else {
+        creditTab.className = "flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg font-label-lg text-label-lg transition-all duration-200 bg-primary-container text-on-primary shadow-sm font-semibold";
+        bankTab.className = "flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg font-label-lg text-label-lg transition-all duration-200 text-on-surface-variant hover:text-on-surface font-medium";
+        bankFields.classList.add('hidden');
+        creditFields.classList.remove('hidden');
+      }
+    }
+
+    function toggleBankDropdown() {
+      const menu = document.getElementById('bank-dropdown-options');
+      const icon = document.getElementById('bank-dropdown-icon');
+      const isHidden = menu.classList.toggle('hidden');
+      icon.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+
+    function selectBank(name, color, initials) {
+      document.getElementById('selected-bank-name').innerText = name;
+      const avatar = document.getElementById('selected-bank-avatar');
+      avatar.innerText = initials;
+      avatar.style.backgroundColor = color;
+      
+      const previewBank = document.getElementById('preview-bank-label');
+      if (previewBank) {
+        previewBank.innerText = name.split(' ')[0] + ' Cartão';
+      }
+      toggleBankDropdown();
+    }
+
+    function selectSubtype(button) {
+      const chips = document.querySelectorAll('.subtype-chip');
+      chips.forEach(chip => {
+        chip.className = "subtype-chip px-3 py-2 rounded-full font-label-md text-label-md transition-all duration-150 bg-surface-container-low border border-surface-container-high text-on-surface-variant hover:text-on-surface hover:border-secondary/30";
+      });
+      button.className = "subtype-chip px-3 py-2 rounded-full font-label-md text-label-md transition-all duration-150 bg-primary-container text-on-primary shadow-xs font-semibold";
+    }
+
+    function selectColor(button, hexColor) {
+      const swatches = document.querySelectorAll('.color-swatch');
+      swatches.forEach(s => {
+        s.classList.remove('scale-110', 'ring-2', 'ring-secondary/50');
+        const icon = s.querySelector('.material-symbols-outlined');
+        if (icon) icon.classList.add('hidden');
+      });
+      button.classList.add('scale-110', 'ring-2', 'ring-secondary/50');
+      const activeIcon = button.querySelector('.material-symbols-outlined');
+      if (activeIcon) activeIcon.classList.remove('hidden');
+    }
+
+    function handleDeleteConfirmation() {
+      if (confirm('Tem certeza que deseja excluir esta conta? Esta ação é irreversível se não houver lançamentos.')) {
+        history.back();
+      }
+    }
+
+    function showSuccessFeedback() {
+      const btn = event.submitter || document.querySelector('button[type="submit"]');
+      btn.innerHTML = `<span class="material-symbols-outlined text-[20px] animate-bounce">check_circle</span> Salvo com Sucesso!`;
+      btn.classList.remove('bg-primary-container');
+      btn.classList.add('bg-secondary');
+      setTimeout(() => {
+        history.back();
+      }, 700);
+    }
+
+    // Dynamic preview updates
+    document.getElementById('closing-day')?.addEventListener('change', function(e) {
+      document.getElementById('preview-closing').innerText = e.target.value.padStart(2, '0');
+    });
+
+    document.getElementById('due-day')?.addEventListener('change', function(e) {
+      document.getElementById('preview-due').innerText = e.target.value.padStart(2, '0');
+    });
+  </script>
+</div></main></body></html>

@@ -6,6 +6,7 @@ import { BillDetail } from "@/features/finance/bills/bill-detail";
 import { Overview } from "@/features/finance/overview/overview";
 import { CardDetail } from "@/features/finance/cards/card-detail";
 import { PurchaseDetail } from "@/features/finance/purchases/purchase-detail";
+import { TransactionForm } from "@/features/finance/transactions/transaction-form";
 import { CategorySettings } from "@/features/settings/category-settings";
 import { initialFinanceState } from "@/features/finance/model/demo-state";
 
@@ -13,6 +14,16 @@ const push = vi.fn();
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push }), usePathname: () => "/dashboard" }));
 
 describe("fluxos financeiros", () => {
+  it("expõe entrada e saída como opções de lançamento acessíveis", () => {
+    render(<FinanceProvider><TransactionForm /></FinanceProvider>);
+    const debit = screen.getByRole("radio", { name: "Saída" });
+    const credit = screen.getByRole("radio", { name: "Entrada" });
+    expect(debit).toBeChecked();
+    expect(credit).not.toBeChecked();
+    fireEvent.click(credit);
+    expect(credit).toBeChecked();
+  });
+
   it("cancelar pagamento não altera e confirmar recalcula os totais", () => {
     render(<FinanceProvider><BillDetail billId="bill-1" /><Overview /></FinanceProvider>);
     expect(screen.getByText("R$ 330,00")).toBeInTheDocument();

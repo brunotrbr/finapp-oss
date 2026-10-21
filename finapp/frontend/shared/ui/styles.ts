@@ -1,4 +1,7 @@
-export const buttonClass = "inline-flex min-h-11 items-center justify-center rounded-xl bg-zinc-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 dark:focus-visible:outline-white";
-export const secondaryButtonClass = "inline-flex min-h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900";
-export const dangerButtonClass = "inline-flex min-h-11 items-center justify-center rounded-xl border border-red-300 bg-white px-4 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:border-red-900 dark:bg-zinc-950 dark:text-red-400 dark:hover:bg-red-950/30";
-export const inputClass = "min-h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base text-zinc-950 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-white";
+const controlBase = "inline-flex min-h-11 items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50";
+
+export const buttonClass = `${controlBase} bg-primary text-on-primary shadow-sm hover:bg-primary-hover active:translate-y-px`;
+export const secondaryButtonClass = `${controlBase} border border-border bg-surface text-primary hover:border-primary/40 hover:bg-primary-container`;
+export const dangerButtonClass = `${controlBase} border border-expense/30 bg-surface text-expense hover:bg-expense-container`;
+export const inputClass = "min-h-11 w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 text-base text-foreground outline-none transition placeholder:text-muted focus:border-secondary focus:ring-4 focus:ring-secondary/10";
+export const formCardClass = "grid gap-5 rounded-2xl border border-border-subtle bg-surface p-5 shadow-[0_8px_30px_-24px_rgba(15,118,110,0.45)] sm:p-6";
