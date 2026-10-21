@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { firebaseAuth } from "@/lib/firebase/client";
+import { firebaseAuth } from "@/infrastructure/firebase/client";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

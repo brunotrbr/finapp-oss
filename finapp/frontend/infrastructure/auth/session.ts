@@ -1,9 +1,22 @@
 import "server-only";
 import { cookies } from "next/headers";
-import { adminAuth } from "@/lib/firebase/admin";
-import { SESSION_COOKIE } from "@/lib/auth/constants";
+import { SESSION_COOKIE } from "@/infrastructure/auth/constants";
+import { adminAuth } from "@/infrastructure/firebase/admin";
 
 const SESSION_MAX_AGE_SECONDS = 5 * 24 * 60 * 60;
+const E2E_TOKEN = "finapp-e2e-token";
+const E2E_SESSION = "finapp-e2e-session";
+
+function e2eAuthEnabled() {
+  return process.env.NODE_ENV !== "production" && process.env.FINAPP_E2E_AUTH === "1";
+}
+
+const e2eUser: SessionUser = {
+  uid: "e2e-user",
+  email: "e2e@finapp.local",
+  displayName: "Pessoa de teste",
+  photoURL: null,
+};
 
 export type SessionUser = {
   uid: string;
@@ -13,6 +26,11 @@ export type SessionUser = {
 };
 
 export async function createSession(idToken: string): Promise<SessionUser> {
+  if (e2eAuthEnabled() && idToken === E2E_TOKEN) {
+    const cookieStore = await cookies();
+    cookieStore.set({ name: SESSION_COOKIE, value: E2E_SESSION, httpOnly: true, secure: false, sameSite: "lax", path: "/", maxAge: SESSION_MAX_AGE_SECONDS });
+    return e2eUser;
+  }
   const auth = adminAuth();
   const decoded = await auth.verifyIdToken(idToken, true);
   const sessionCookie = await auth.createSessionCookie(idToken, {
@@ -44,6 +62,8 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   const sessionCookie = cookieStore.get(SESSION_COOKIE)?.value;
   if (!sessionCookie) return null;
 
+  if (e2eAuthEnabled() && sessionCookie === E2E_SESSION) return e2eUser;
+
   try {
     const auth = adminAuth();
     // checkRevoked: true so logout and disabled accounts take effect immediately.
@@ -63,6 +83,11 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
 export async function clearSession(): Promise<void> {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get(SESSION_COOKIE)?.value;
+
+  if (e2eAuthEnabled() && sessionCookie === E2E_SESSION) {
+    cookieStore.delete(SESSION_COOKIE);
+    return;
+  }
 
   if (sessionCookie) {
     try {

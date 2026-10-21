@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { SESSION_COOKIE } from "@/lib/auth/constants";
+import { SESSION_COOKIE } from "@/infrastructure/auth/constants";
 
 const PROTECTED_PREFIXES = ["/dashboard"];
 
@@ -16,10 +16,6 @@ export function proxy(request: NextRequest) {
 
   if (isProtected && !hasSessionCookie) {
     return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  if (pathname === "/login" && hasSessionCookie) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();

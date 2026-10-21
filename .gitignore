@@ -1,0 +1,12 @@
+# Ignore agent configuration folders
+.agents/
+
+# Ignore AI workflow artifacts
+.ai/
+
+# Ignore editor settings
+.vscode/
+
+# Ignore local custom folders
+finapp/bandua_wireframe_revisado/
+

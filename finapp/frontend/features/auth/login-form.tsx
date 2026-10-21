@@ -4,15 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   type User,
 } from "firebase/auth";
-import { firebaseAuth, googleProvider } from "@/lib/firebase/client";
-import { authErrorMessage } from "@/lib/auth/auth-errors";
+import { authErrorMessage } from "@/features/auth/auth-errors";
+import { firebaseAuth, googleProvider } from "@/infrastructure/firebase/client";
 
-type Mode = "login" | "register";
+type Mode = "login" | "register" | "reset";
 
 export function LoginForm() {
   const router = useRouter();
@@ -21,9 +22,9 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [message, setMessage] = useState("");
 
-  async function startSession(user: User) {
-    const idToken = await user.getIdToken();
+  async function startSessionToken(idToken: string) {
     const response = await fetch("/api/auth/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -39,12 +40,31 @@ export function LoginForm() {
     router.refresh();
   }
 
+  async function startSession(user: User) {
+    await startSessionToken(await user.getIdToken());
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setPending(true);
 
+    if (mode === "reset") {
+      try {
+        if (process.env.NEXT_PUBLIC_FINAPP_E2E_AUTH !== "1") await sendPasswordResetEmail(firebaseAuth(), email);
+      } catch {
+        // A resposta é intencionalmente genérica para não enumerar usuários.
+      }
+      setMessage("Se houver uma conta para este e-mail, você receberá as instruções de recuperação.");
+      setPending(false);
+      return;
+    }
+
     try {
+      if (process.env.NEXT_PUBLIC_FINAPP_E2E_AUTH === "1") {
+        await startSessionToken("finapp-e2e-token");
+        return;
+      }
       const auth = firebaseAuth();
       const credential =
         mode === "register"
@@ -62,6 +82,10 @@ export function LoginForm() {
     setPending(true);
 
     try {
+      if (process.env.NEXT_PUBLIC_FINAPP_E2E_AUTH === "1") {
+        await startSessionToken("finapp-e2e-token");
+        return;
+      }
       const credential = await signInWithPopup(firebaseAuth(), googleProvider());
       await startSession(credential.user);
     } catch (err) {
@@ -73,7 +97,7 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-sm rounded-2xl border border-black/[.08] bg-white p-8 shadow-sm dark:border-white/[.145] dark:bg-zinc-950">
       <h1 className="text-2xl font-semibold tracking-tight text-black dark:text-zinc-50">
-        {mode === "login" ? "Sign in" : "Create an account"}
+        {mode === "login" ? "Entrar" : mode === "register" ? "Criar conta" : "Recuperar acesso"}
       </h1>
       <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
         Finapp Finances
@@ -81,7 +105,7 @@ export function LoginForm() {
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Email
+          E-mail
           <input
             type="email"
             name="email"
@@ -93,8 +117,8 @@ export function LoginForm() {
           />
         </label>
 
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Password
+        {mode !== "reset" && <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          Senha
           <input
             type="password"
             name="password"
@@ -105,26 +129,27 @@ export function LoginForm() {
             onChange={(event) => setPassword(event.target.value)}
             className="rounded-lg border border-black/[.08] bg-transparent px-3 py-2 text-base text-black outline-none focus:border-zinc-500 dark:border-white/[.145] dark:text-zinc-50"
           />
-        </label>
+        </label>}
 
         {error && (
           <p role="alert" className="text-sm text-red-600 dark:text-red-400">
             {error}
           </p>
         )}
+        {message && <p role="status" className="text-sm text-zinc-700 dark:text-zinc-300">{message}</p>}
 
         <button
           type="submit"
           disabled={pending}
           className="h-11 rounded-full bg-foreground px-5 text-base font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
         >
-          {mode === "login" ? "Login" : "Register"}
+          {pending ? "Aguarde…" : mode === "login" ? "Entrar" : mode === "register" ? "Criar conta" : "Enviar instruções"}
         </button>
       </form>
 
-      <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-wide text-zinc-500">
+      {mode !== "reset" && <><div className="my-5 flex items-center gap-3 text-xs uppercase tracking-wide text-zinc-500">
         <span className="h-px flex-1 bg-black/[.08] dark:bg-white/[.145]" />
-        or
+        ou
         <span className="h-px flex-1 bg-black/[.08] dark:bg-white/[.145]" />
       </div>
 
@@ -134,21 +159,22 @@ export function LoginForm() {
         disabled={pending}
         className="h-11 w-full rounded-full border border-solid border-black/[.08] px-5 text-base font-medium transition-colors hover:bg-black/[.04] disabled:opacity-50 dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
       >
-        Continue with Google
+        Continuar com Google
       </button>
+      </>}
 
       <button
         type="button"
         onClick={() => {
           setMode(mode === "login" ? "register" : "login");
           setError("");
+          setMessage("");
         }}
-        className="mt-6 w-full text-sm text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-400"
+        className="mt-6 min-h-11 w-full text-sm text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-400"
       >
-        {mode === "login"
-          ? "Don't have an account? Register"
-          : "Already have an account? Login"}
+        {mode === "login" ? "Ainda não tem conta? Cadastre-se" : "Voltar para entrar"}
       </button>
+      {mode === "login" && <button type="button" onClick={() => { setMode("reset"); setError(""); setMessage(""); }} className="mt-3 min-h-11 w-full text-sm font-medium text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-400">Esqueci minha senha</button>}
     </div>
   );
 }
