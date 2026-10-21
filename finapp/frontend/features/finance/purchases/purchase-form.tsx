@@ -9,7 +9,7 @@ import { newId } from "@/features/finance/model/new-id";
 import { Field } from "@/shared/ui/field";
 import { MissingEntity } from "@/shared/ui/feedback";
 import { PageHeader } from "@/shared/ui/page-header";
-import { buttonClass, inputClass } from "@/shared/ui/styles";
+import { buttonClass, formCardClass, inputClass } from "@/shared/ui/styles";
 
 export function PurchaseForm({ cardId }: { cardId: string }) {
   const { state, dispatch } = useFinance();
@@ -33,5 +33,5 @@ export function PurchaseForm({ cardId }: { cardId: string }) {
     dispatch({ type: "purchase/add", purchase: { id: newId("purchase"), cardId, description: description.trim(), amount, date, installments } });
     router.push(`/dashboard/cards/${cardId}`);
   }
-  return <div className="space-y-6"><PageHeader title="Nova compra" eyebrow={card.name} /><form onSubmit={submit} className="grid gap-4 rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950"><Field label="Descrição" error={error?.field === "description" ? error.message : null}><input className={inputClass} name="description" required /></Field><Field label="Valor total (R$)" error={error?.field === "amount" ? error.message : null}><input className={inputClass} name="amount" type="number" min="0.01" step="0.01" required /></Field><Field label="Data" error={error?.field === "date" ? error.message : null}><input className={inputClass} name="date" type="date" defaultValue={DEMO_DATE} required /></Field><Field label="Parcelas" error={error?.field === "installments" ? error.message : null}><input className={inputClass} name="installments" type="number" min="1" step="1" defaultValue="1" required /></Field><button className={buttonClass}>Salvar compra</button></form></div>;
+  return <div className="space-y-6"><PageHeader title="Nova compra" eyebrow={card.name} /><form onSubmit={submit} className={formCardClass}><Field label="Descrição" error={error?.field === "description" ? error.message : null}><input className={inputClass} name="description" required /></Field><Field label="Valor total (R$)" error={error?.field === "amount" ? error.message : null}><input className={`${inputClass} text-xl font-bold tabular-nums`} name="amount" type="number" min="0.01" step="0.01" required /></Field><div className="grid gap-4 sm:grid-cols-2"><Field label="Data" error={error?.field === "date" ? error.message : null}><input className={inputClass} name="date" type="date" defaultValue={DEMO_DATE} required /></Field><Field label="Parcelas" error={error?.field === "installments" ? error.message : null}><input className={inputClass} name="installments" type="number" min="1" step="1" defaultValue="1" required /></Field></div><button className={`${buttonClass} w-full`}>Salvar compra</button></form></div>;
 }

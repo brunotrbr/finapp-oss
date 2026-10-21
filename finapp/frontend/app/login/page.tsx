@@ -12,8 +12,8 @@ export default async function LoginPage() {
   if (user) redirect("/dashboard");
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-10 font-sans dark:bg-black">
-      <div className="w-full max-w-sm"><div className="mb-6 text-center"><p className="text-xl font-bold">Finapp Finances</p><p className="mt-1 text-sm text-zinc-500">Suas finanças em um só lugar</p></div><LoginForm /></div>
+    <div className="flex flex-1 items-center justify-center bg-background px-4 py-10 font-sans">
+      <div className="w-full max-w-md"><div className="mb-7 text-center"><span className="mx-auto grid size-14 place-items-center rounded-2xl bg-primary text-xl font-bold text-on-primary shadow-lg shadow-primary/20" aria-hidden>F</span><p className="mt-4 font-bold text-foreground"><span>Finapp Finances</span><span className="ml-2 rounded-full bg-primary-container px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-primary">Open Source</span></p><p className="mt-2 text-sm text-muted">Organize suas finanças com clareza</p></div><LoginForm /></div>
     </div>
   );
 }

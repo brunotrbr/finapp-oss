@@ -39,12 +39,12 @@ export function AccountDetail({ accountId }: { accountId: string }) {
   return (
     <div className="space-y-6">
       <PageHeader title={account.name} eyebrow={`${account.bank} • ${account.type}`} action={<Link className={secondaryButtonClass} href={`/dashboard/accounts/${account.id}/edit`}>Editar</Link>} />
-      <Card className="bg-zinc-950 text-white dark:bg-white dark:text-zinc-950"><p className="text-sm opacity-70">Saldo atual</p><p className="mt-2 text-3xl font-bold">{formatMoney(accountBalance(account, state.transactions))}</p></Card>
+      <Card className="border-0 bg-gradient-to-br from-on-primary-container to-primary text-on-primary shadow-xl shadow-primary/15"><p className="text-sm font-medium">Saldo atual</p><p className="mt-2 text-4xl font-bold tracking-tight tabular-nums">{formatMoney(accountBalance(account, state.transactions))}</p><p className="mt-3 text-xs">Saldo inicial + lançamentos desta conta</p></Card>
       <div className="flex flex-wrap gap-3"><Link className={buttonClass} href={`/dashboard/transactions/new?account=${account.id}`}>Novo lançamento</Link><ConfirmButton label="Excluir conta" title="Excluir esta conta?" description="A conta só pode ser excluída quando não possui lançamentos nem pendências." onConfirm={remove} /></div>
-      {message && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/30 dark:text-red-300">{message}</p>}
+      {message && <p role="alert" className="rounded-xl border border-expense/20 bg-expense-container p-3 text-sm text-expense">{message}</p>}
       <section className="space-y-3">
         <div className="flex items-end justify-between gap-4"><h2 className="text-lg font-bold">Extrato</h2><Field label="Período"><select className={inputClass} value={period} onChange={(event) => setPeriod(event.target.value)}><option value="all">Todas as datas</option><option value="2026-10">Outubro/2026</option><option value="2026-09">Setembro/2026</option></select></Field></div>
-        {transactions.length ? <Card>{transactions.map((transaction) => <EntityRow key={transaction.id} title={transaction.description} subtitle={`${formatDate(transaction.date)} • ${transaction.category}`} value={formatMoney(transaction.amount)} href={`/dashboard/transactions/${transaction.id}`} />)}</Card> : <EmptyState>Nenhum lançamento no período.</EmptyState>}
+        {transactions.length ? <Card>{transactions.map((transaction) => <EntityRow key={transaction.id} title={transaction.description} subtitle={`${formatDate(transaction.date)} • ${transaction.category}`} value={formatMoney(transaction.amount)} valueTone={transaction.amount >= 0 ? "income" : "expense"} href={`/dashboard/transactions/${transaction.id}`} />)}</Card> : <EmptyState>Nenhum lançamento no período.</EmptyState>}
       </section>
     </div>
   );
