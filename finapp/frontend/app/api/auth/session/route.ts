@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { clearSession, createSession } from "@/lib/auth/session";
+import { clearSession, createSession } from "@/infrastructure/auth/session";
 
 export async function POST(request: Request) {
   let idToken: unknown;

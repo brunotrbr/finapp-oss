@@ -10,3 +10,6 @@ frontend/.vscode
 frontend/.idea
 frontend/node_modules
 frontend/.angular
+
+# Ignore agent configuration files
+.agents/
