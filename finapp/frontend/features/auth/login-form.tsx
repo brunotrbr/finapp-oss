@@ -1,10 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -14,7 +14,7 @@ import { authErrorMessage } from "@/features/auth/auth-errors";
 import { firebaseAuth, googleProvider } from "@/infrastructure/firebase/client";
 import { buttonClass, inputClass, secondaryButtonClass } from "@/shared/ui/styles";
 
-type Mode = "login" | "register" | "reset";
+type Mode = "login" | "register";
 
 export function LoginForm() {
   const router = useRouter();
@@ -23,7 +23,6 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-  const [message, setMessage] = useState("");
 
   async function startSessionToken(idToken: string) {
     const response = await fetch("/api/auth/session", {
@@ -49,17 +48,6 @@ export function LoginForm() {
     event.preventDefault();
     setError("");
     setPending(true);
-
-    if (mode === "reset") {
-      try {
-        if (process.env.NEXT_PUBLIC_FINAPP_E2E_AUTH !== "1") await sendPasswordResetEmail(firebaseAuth(), email);
-      } catch {
-        // A resposta é intencionalmente genérica para não enumerar usuários.
-      }
-      setMessage("Se houver uma conta para este e-mail, você receberá as instruções de recuperação.");
-      setPending(false);
-      return;
-    }
 
     try {
       if (process.env.NEXT_PUBLIC_FINAPP_E2E_AUTH === "1") {
@@ -98,10 +86,10 @@ export function LoginForm() {
   return (
     <div className="w-full rounded-3xl border border-border-subtle bg-surface p-6 shadow-[0_24px_60px_-36px_rgba(15,118,110,0.55)] sm:p-8">
       <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-        {mode === "login" ? "Entrar" : mode === "register" ? "Criar conta" : "Recuperar acesso"}
+        {mode === "login" ? "Bem-vindo de volta" : "Criar conta"}
       </h1>
       <p className="mt-2 text-sm text-muted">
-        {mode === "login" ? "Bem-vindo de volta ao seu espaço financeiro." : mode === "register" ? "Comece com seus dados essenciais." : "Enviaremos instruções para o e-mail informado."}
+        {mode === "login" ? "Acesse sua gestão financeira pessoal." : "Comece com seus dados essenciais."}
       </p>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
@@ -118,7 +106,7 @@ export function LoginForm() {
           />
         </label>
 
-        {mode !== "reset" && <label className="flex flex-col gap-1.5 text-sm font-medium text-foreground">
+        <label className="flex flex-col gap-1.5 text-sm font-medium text-foreground">
           Senha
           <input
             type="password"
@@ -130,25 +118,24 @@ export function LoginForm() {
             onChange={(event) => setPassword(event.target.value)}
             className={inputClass}
           />
-        </label>}
+        </label>
 
         {error && (
           <p role="alert" className="rounded-xl bg-expense-container p-3 text-sm text-expense">
             {error}
           </p>
         )}
-        {message && <p role="status" className="rounded-xl bg-primary-container p-3 text-sm text-on-primary-container">{message}</p>}
 
         <button
           type="submit"
           disabled={pending}
           className={`${buttonClass} w-full text-base`}
         >
-          {pending ? "Aguarde…" : mode === "login" ? "Entrar" : mode === "register" ? "Criar conta" : "Enviar instruções"}
+          {pending ? "Aguarde…" : mode === "login" ? "Entrar" : "Criar conta"}
         </button>
       </form>
 
-      {mode !== "reset" && <><div className="my-5 flex items-center gap-3 text-xs uppercase tracking-wide text-muted">
+      <><div className="my-5 flex items-center gap-3 text-xs uppercase tracking-wide text-muted">
         <span className="h-px flex-1 bg-border-subtle" />
         ou
         <span className="h-px flex-1 bg-border-subtle" />
@@ -162,20 +149,19 @@ export function LoginForm() {
       >
         Continuar com Google
       </button>
-      </>}
+      </>
 
       <button
         type="button"
         onClick={() => {
           setMode(mode === "login" ? "register" : "login");
           setError("");
-          setMessage("");
         }}
         className="mt-6 min-h-11 w-full text-sm font-semibold text-primary underline-offset-4 hover:underline"
       >
         {mode === "login" ? "Ainda não tem conta? Cadastre-se" : "Voltar para entrar"}
       </button>
-      {mode === "login" && <button type="button" onClick={() => { setMode("reset"); setError(""); setMessage(""); }} className="mt-1 min-h-11 w-full text-sm font-medium text-muted underline-offset-4 hover:text-primary hover:underline">Esqueci minha senha</button>}
+      {mode === "login" && <Link href="/forgot-password" className="mt-1 inline-flex min-h-11 w-full items-center justify-center text-sm font-medium text-muted underline-offset-4 hover:text-primary hover:underline">Esqueci minha senha</Link>}
     </div>
   );
 }

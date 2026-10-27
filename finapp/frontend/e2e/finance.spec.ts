@@ -29,7 +29,7 @@ test("cria e edita conta, lança, filtra, recalcula, remove e restaura fixtures 
   await page.getByRole("link", { name: "Editar" }).click();
   await page.getByLabel("Nome da conta").fill("Conta E2E editada");
   await page.getByRole("button", { name: "Salvar conta" }).click();
-  await page.getByRole("link", { name: "Novo lançamento" }).click();
+  await page.getByRole("link", { name: "Adicionar lançamento" }).click();
   await page.getByLabel("Descrição").fill("Compra E2E");
   await page.getByLabel("Valor (R$)").fill("100");
   await page.getByRole("button", { name: "Salvar lançamento" }).click();
@@ -137,4 +137,37 @@ test("cria cartão e compra parcelada, mostra detalhe e exclui após confirmaç�
   await page.getByRole("button", { name: "Excluir compra" }).click();
   await page.getByRole("button", { name: "Confirmar" }).click();
   await expect(page.getByText("Nenhuma compra neste cartão.")).toBeVisible();
+});
+
+test("reclassifica vínculos, confirma a exclusão uma vez e neutraliza refresh", async ({ page }) => {
+  await login(page);
+  await page.goto("/dashboard/accounts/account-1");
+  await page.getByLabel("Conta de destino").selectOption("account-2");
+  await page.getByRole("button", { name: "Excluir conta" }).click();
+  await page.getByRole("button", { name: "Confirmar" }).click();
+  await expect(page).toHaveURL(/\/dashboard\/accounts\/deletion-success$/);
+  await expect(page.getByRole("heading", { name: "Conta excluída" })).toBeVisible();
+  await expect(page.getByText(/reclassificados para Reserva/)).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Nenhuma exclusão recente" })).toBeVisible();
+});
+
+test("paga fatura uma vez e não oferece ação para ciclo vazio", async ({ page }) => {
+  await login(page);
+  await page.goto("/dashboard/cards/card-1/invoice");
+  await expect(page.getByText("Parcela 1 de 3")).toBeVisible();
+  await page.getByLabel("Conta para pagamento").selectOption("account-1");
+  await page.getByRole("button", { name: "Pagar fatura" }).click();
+  await page.getByRole("button", { name: "Confirmar" }).click();
+  await expect(page.getByRole("status")).toContainText("Fatura paga");
+  await expect(page.getByRole("button", { name: "Fatura paga" })).toBeDisabled();
+
+  await page.goto("/dashboard/cards/new");
+  await page.getByLabel("Nome").fill("Cartão sem compras");
+  await page.getByLabel("Limite (R$)").fill("1000");
+  await page.getByRole("button", { name: "Salvar cartão" }).click();
+  await page.getByRole("link", { name: "Ver fatura" }).click();
+  await expect(page.getByText("Nenhum lançamento neste ciclo.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Pagar fatura" })).toHaveCount(0);
 });

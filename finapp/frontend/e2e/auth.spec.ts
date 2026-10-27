@@ -19,14 +19,14 @@ async function login(page: import("@playwright/test").Page) {
 test("sessão ausente redireciona dashboard para login", async ({ page }) => {
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole("heading", { name: "Entrar" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Bem-vindo de volta" })).toBeVisible();
 });
 
 test("cookie adulterado não libera conteúdo protegido", async ({ context, page }) => {
   await context.addCookies([{ name: "__session", value: "invalido", domain: "127.0.0.1", path: "/" }]);
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByText("Finapp Finances").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Bem-vindo de volta" })).toBeVisible();
 });
 
 test("login é utilizável em viewport estreito", async ({ page }) => {
@@ -36,7 +36,7 @@ test("login é utilizável em viewport estreito", async ({ page }) => {
   await expect(page.getByLabel("Senha")).toBeVisible();
   await expect(page.getByRole("button", { name: "Entrar" })).toBeVisible();
   const registerBox = await page.getByRole("button", { name: /Cadastre-se/ }).boundingBox();
-  const resetBox = await page.getByRole("button", { name: "Esqueci minha senha" }).boundingBox();
+  const resetBox = await page.getByRole("link", { name: "Esqueci minha senha" }).boundingBox();
   expect(registerBox?.height).toBeGreaterThanOrEqual(44);
   expect(resetBox?.height).toBeGreaterThanOrEqual(44);
 });
@@ -45,7 +45,8 @@ test("login controlado cria sessão e sessão válida não reabre o login", asyn
   await login(page);
   await page.goto("/login");
   await expect(page).toHaveURL(/\/dashboard$/);
-  await expect(page.getByRole("heading", { name: /Olá, Pessoa de teste/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Minhas Contas" })).toBeVisible();
+  await expect(page.getByText("Olá, Pessoa de teste").first()).toBeVisible();
 });
 
 test("login completo pode ser operado somente por teclado", async ({ page }) => {
@@ -88,8 +89,19 @@ test("login Google controlado usa sua ação dedicada", async ({ page }) => {
 
 test("recuperação responde de forma genérica", async ({ page }) => {
   await page.goto("/login");
-  await page.getByRole("button", { name: "Esqueci minha senha" }).click();
-  await page.getByLabel("E-mail").fill("desconhecido@finapp.local");
-  await page.getByRole("button", { name: "Enviar instruções" }).click();
+  await page.getByRole("link", { name: "Esqueci minha senha" }).click();
+  await expect(page).toHaveURL(/\/forgot-password$/);
+  await page.getByLabel("E-mail cadastrado").fill("desconhecido@finapp.local");
+  await page.getByRole("button", { name: "Enviar link de recuperação" }).click();
   await expect(page.getByRole("status")).toContainText("Se houver uma conta");
+});
+
+test("deep link de redefinição inválido é seguro e responsivo", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("/reset-password");
+  await expect(page.getByRole("heading", { name: "Crie uma nova senha" })).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("Link de recuperação inválido");
+  await expect(page.getByRole("link", { name: "Voltar para entrar" })).toBeVisible();
+  const hasHorizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+  expect(hasHorizontalOverflow).toBe(false);
 });

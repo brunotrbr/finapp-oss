@@ -41,12 +41,32 @@ export type Purchase = {
   installments: number;
 };
 
+export type InvoicePayment = {
+  id: string;
+  cardId: string;
+  cycle: string;
+  accountId: string;
+  amount: number;
+  paidOn: string;
+};
+
+export type AccountDeletionResult = {
+  accountName: string;
+  reclassified: boolean;
+  destinationName?: string;
+  transactionCount?: number;
+  billCount?: number;
+  transferredInitialBalance?: number;
+};
+
 export type FinanceState = {
   accounts: Account[];
   transactions: Transaction[];
   bills: Bill[];
   cards: CreditCard[];
   purchases: Purchase[];
+  invoicePayments: InvoicePayment[];
   categories: string[];
   displayName: string;
+  accountDeletionResult?: AccountDeletionResult;
 };

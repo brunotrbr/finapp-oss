@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FirebaseError } from "firebase/app";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -133,13 +133,9 @@ describe("LoginForm", () => {
     expect(screen.getByRole("button", { name: "Entrar" })).toBeEnabled();
   });
 
-  it("envia recuperação pelo Firebase e mostra confirmação neutra", async () => {
-    mocks.reset.mockResolvedValue(undefined);
+  it("leva a recuperação para sua rota pública dedicada", () => {
     render(<LoginForm />);
-    fireEvent.click(screen.getByRole("button", { name: /esqueci minha senha/i }));
-    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "ana@example.com" } });
-    fireEvent.click(screen.getByRole("button", { name: /enviar instruções/i }));
-    await waitFor(() => expect(mocks.reset).toHaveBeenCalledWith(mocks.auth, "ana@example.com"));
-    expect(screen.getByRole("status")).toHaveTextContent(/se houver uma conta/i);
+    expect(screen.getByRole("link", { name: /esqueci minha senha/i })).toHaveAttribute("href", "/forgot-password");
+    expect(screen.queryByRole("button", { name: /enviar instruções/i })).not.toBeInTheDocument();
   });
 });

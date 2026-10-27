@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { ConfirmButton } from "./confirm-button";
 import { Field } from "./field";
+import { PageHeader } from "./page-header";
 
 describe("ConfirmButton", () => {
   it("cancela sem agir e devolve foco ao acionador", () => {
@@ -51,5 +52,13 @@ describe("Field", () => {
     expect(input).toHaveAttribute("aria-invalid", "true");
     expect(input).toHaveAttribute("aria-describedby", alert.id);
     expect(alert.id).not.toBe("");
+  });
+});
+
+describe("PageHeader", () => {
+  it("expõe contexto visual sem perder a hierarquia do título", () => {
+    render(<PageHeader eyebrow="Movimentação" title="Novo lançamento" description="Registre uma entrada ou saída." />);
+    expect(screen.getByRole("heading", { level: 1, name: "Novo lançamento" })).toBeInTheDocument();
+    expect(screen.getByText("Registre uma entrada ou saída.")).toHaveClass("text-muted");
   });
 });

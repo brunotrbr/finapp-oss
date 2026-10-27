@@ -25,5 +25,6 @@ export const initialFinanceState: FinanceState = {
   purchases: [
     { id: "purchase-1", cardId: "card-1", description: "Notebook", amount: 900, date: "2026-10-12", installments: 3 },
   ],
+  invoicePayments: [],
   categories: ["Alimentação", "Moradia", "Transporte", "Saúde", "Trabalho", "Lazer", "Transferência", "Outros"],
 };

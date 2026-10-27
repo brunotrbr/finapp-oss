@@ -1,0 +1,3 @@
+export default function Loading() {
+  return <div aria-busy="true" aria-label="Carregando conteúdo" className="animate-pulse space-y-5"><div className="h-8 w-48 rounded bg-surface-strong" /><div className="h-36 rounded-2xl bg-primary-container/60" /><div className="grid gap-4 sm:grid-cols-2"><div className="h-24 rounded-2xl bg-surface-strong" /><div className="h-24 rounded-2xl bg-surface-strong" /></div><span className="sr-only">Carregando…</span></div>;
+}

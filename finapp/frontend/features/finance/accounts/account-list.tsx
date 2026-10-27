@@ -14,7 +14,7 @@ export function AccountsList() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Contas" action={<Link className={buttonClass} href="/dashboard/accounts/new">Nova conta</Link>} />
+      <PageHeader title="Contas" eyebrow="Patrimônio" description="Acompanhe saldos e abra o extrato de cada conta." action={<Link className={buttonClass} href="/dashboard/accounts/new">Nova conta</Link>} />
       {state.accounts.length ? (
         <Card>
           {state.accounts.map((account) => (

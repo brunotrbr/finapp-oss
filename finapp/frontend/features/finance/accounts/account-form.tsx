@@ -45,12 +45,12 @@ export function AccountForm({ accountId }: { accountId?: string }) {
 
   return (
     <div className="space-y-6">
-      <PageHeader title={account ? "Editar conta" : "Cadastrar conta"} eyebrow="Conta bancária" />
+      <PageHeader title={account ? "Editar conta" : "Cadastrar conta"} eyebrow="Conta bancária" description="Use um nome fácil de reconhecer no extrato e nos pagamentos." />
       <form onSubmit={submit} className={formCardClass}>
         <Field label="Nome da conta" error={error?.field === "name" ? error.message : null}><input className={inputClass} name="name" required defaultValue={account?.name} /></Field>
         <Field label="Instituição"><input className={inputClass} name="bank" defaultValue={account?.bank} /></Field>
-        <Field label="Tipo"><select className={inputClass} name="type" defaultValue={account?.type || "Corrente"}><option>Corrente</option><option>Poupança</option><option>Carteira</option></select></Field>
-        <Field label="Saldo inicial (R$)" error={error?.field === "initialBalance" ? error.message : null}><input className={inputClass} name="initialBalance" type="number" step="0.01" required defaultValue={account?.initialBalance ?? 0} /></Field>
+        <fieldset><legend className="mb-2 text-sm font-medium">Tipo</legend><div className="grid grid-cols-3 gap-2 rounded-2xl bg-surface-subtle p-1.5">{(["Corrente", "Poupança", "Carteira"] as Account["type"][]).map((type) => <label key={type} className="flex min-h-11 cursor-pointer items-center justify-center rounded-xl px-2 text-xs font-semibold transition has-[:checked]:bg-primary has-[:checked]:text-on-primary has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-secondary/60"><input className="sr-only" type="radio" name="type" value={type} defaultChecked={(account?.type || "Corrente") === type} />{type}</label>)}</div></fieldset>
+        <Field label="Saldo inicial (R$)" error={error?.field === "initialBalance" ? error.message : null}><input className={`${inputClass} text-2xl font-bold tabular-nums`} name="initialBalance" type="number" step="0.01" required defaultValue={account?.initialBalance ?? 0} /></Field>
         <button className={`${buttonClass} w-full`} type="submit">Salvar conta</button>
       </form>
       <Notice>Regra demonstrativa: saldo inicial + lançamentos. Não há persistência nesta versão.</Notice>

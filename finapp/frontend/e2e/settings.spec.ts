@@ -22,7 +22,8 @@ test("edita perfil em memória, adiciona categoria e rejeita duplicata", async (
   await page.getByLabel("Nome exibido").fill("Nome E2E");
   await page.getByRole("button", { name: "Salvar nome" }).click();
   await page.getByRole("link", { name: "Finapp Finances" }).click();
-  await expect(page.getByRole("heading", { name: "Olá, Nome E2E" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Minhas Contas" })).toBeVisible();
+  await expect(page.getByText("Olá, Nome E2E").first()).toBeVisible();
   await page.goto("/dashboard/settings/categories");
   await page.getByLabel("Nova categoria").fill("Casa nova");
   await page.getByRole("button", { name: "Adicionar categoria" }).click();
@@ -56,4 +57,27 @@ test("página inexistente usa o estado real de não encontrado", async ({ page }
   await login(page);
   await page.goto("/rota-que-nao-existe");
   await expect(page.getByRole("heading", { name: /não encontrada/i })).toBeVisible();
+});
+
+test("edita e reclassifica categorias com erros associados e protege Outros", async ({ page }) => {
+  await login(page);
+  await page.goto("/dashboard/settings/categories");
+  await expect(page.getByText("Categoria do sistema")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Editar Outros" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Excluir Outros" })).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Editar Moradia" }).click();
+  const edit = page.getByLabel("Nome da categoria");
+  await edit.fill("Alimentação");
+  await page.getByRole("button", { name: "Salvar categoria" }).click();
+  await expect(edit).toHaveAttribute("aria-invalid", "true");
+  await page.getByRole("button", { name: "Cancelar edição" }).click();
+
+  await page.getByRole("button", { name: "Excluir Moradia" }).click();
+  const destination = page.getByLabel("Reclassificar como");
+  await page.getByRole("button", { name: "Confirmar exclusão" }).click();
+  await expect(destination).toHaveAttribute("aria-invalid", "true");
+  await destination.selectOption("Outros");
+  await page.getByRole("button", { name: "Confirmar exclusão" }).click();
+  await expect(page.getByRole("status")).toContainText("Categoria excluída");
 });

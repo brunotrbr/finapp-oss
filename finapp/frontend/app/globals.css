@@ -57,10 +57,17 @@
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--primary-container) 45%, transparent) 0, transparent 28rem),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-plus-jakarta), Arial, Helvetica, sans-serif;
   font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--secondary-container);
+  color: var(--foreground);
 }
 
 button, a, input, select, textarea {
