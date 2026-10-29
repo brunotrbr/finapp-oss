@@ -16,7 +16,7 @@ import { buttonClass, inputClass, secondaryButtonClass } from "@/shared/ui/style
 
 type Mode = "login" | "register";
 
-export function LoginForm() {
+export function LoginForm({ showHeading = true }: { showHeading?: boolean }) {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
@@ -85,14 +85,14 @@ export function LoginForm() {
 
   return (
     <div className="w-full rounded-3xl border border-border-subtle bg-surface p-6 shadow-[0_24px_60px_-36px_rgba(15,118,110,0.55)] sm:p-8">
-      <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+      {showHeading && <><h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
         {mode === "login" ? "Bem-vindo de volta" : "Criar conta"}
       </h1>
       <p className="mt-2 text-sm text-muted">
         {mode === "login" ? "Acesse sua gestão financeira pessoal." : "Comece com seus dados essenciais."}
-      </p>
+      </p></>}
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className={`${showHeading ? "mt-6" : ""} flex flex-col gap-4`}>
         <label className="flex flex-col gap-1.5 text-sm font-medium text-foreground">
           E-mail
           <input

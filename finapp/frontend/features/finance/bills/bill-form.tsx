@@ -10,9 +10,10 @@ import { PageHeader } from "@/shared/ui/page-header";
 import { buttonClass, formCardClass, inputClass } from "@/shared/ui/styles";
 
 export function BillForm() {
-  const { state, dispatch } = useFinance();
+  const { state, dispatch, remote } = useFinance();
   const router = useRouter();
   const [error, setError] = useState<{ field: "description" | "amount" | "dueDate" | "accountId"; message: string } | null>(null);
+  if (remote) return <EmptyState>Criação de pendências fica indisponível até a API oferecer esse endpoint.</EmptyState>;
   if (!state.accounts.length) return <EmptyState>Cadastre uma conta primeiro.</EmptyState>;
 
   function submit(event: React.FormEvent<HTMLFormElement>) {

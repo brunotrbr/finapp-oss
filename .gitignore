@@ -7,6 +7,13 @@
 # Ignore editor settings
 .vscode/
 
+# Ignore .NET build and test artifacts in every project
+**/[Bb]in/
+**/[Oo]bj/
+**/[Tt]est[Rr]esults/
+**/*.coverage
+**/*.coveragexml
+
 # Ignore local custom folders
 finapp/bandua_wireframe_revisado/
 

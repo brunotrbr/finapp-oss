@@ -39,6 +39,12 @@ describe("LogoutButton", () => {
     expect(order).toEqual(["firebase", "server", "redirect"]);
   });
 
+  it("adota semântica de item acionável quando usado no menu do usuário", () => {
+    render(<LogoutButton menuItem />);
+
+    expect(screen.getByRole("menuitem", { name: "Encerrar sessão" })).toBeInTheDocument();
+  });
+
   it("tenta remover a sessão servidor mesmo se o logout Firebase falhar", async () => {
     mocks.signOut.mockRejectedValue(new Error("offline"));
     mocks.fetch.mockResolvedValue({ ok: true });

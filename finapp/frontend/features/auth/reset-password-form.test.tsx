@@ -19,6 +19,7 @@ describe("ResetPasswordForm", () => {
     render(<ResetPasswordForm mode={undefined} oobCode={undefined} />);
     expect(screen.getByRole("alert")).toHaveTextContent("Link de recuperação inválido");
     expect(mocks.verify).not.toHaveBeenCalled();
+    expect(screen.getByRole("link", { name: "Voltar para entrar" })).toHaveAttribute("href", "/login");
   });
 
   it("valida o código e confirma senhas iguais", async () => {

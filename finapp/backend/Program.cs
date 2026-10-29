@@ -1,4 +1,6 @@
 using Finapp.Api.Entities;
+using Finapp.Api.Authorization;
+using Finapp.Api.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,15 +12,19 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("Frontend", policy =>
     {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+        if (origins.Length > 0)
+            policy.WithOrigins(origins).AllowAnyMethod().AllowAnyHeader();
     });
 });
 
 var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAccessScope, ClaimsAccessScope>();
 
 var firebaseProjectId = builder.Configuration["Firebase:ProjectId"];
 
@@ -46,7 +52,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseCors("AllowAll");
+app.UseCors("Frontend");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -61,4 +67,8 @@ app.MapGet("/hello", (System.Security.Claims.ClaimsPrincipal user) =>
 // Quick unauthenticated endpoint for health check
 app.MapGet("/health", () => new { Status = "OK" });
 
+app.MapFinanceEndpoints();
+
 app.Run();
+
+public partial class Program;

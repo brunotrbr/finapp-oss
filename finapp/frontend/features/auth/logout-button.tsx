@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { signOut } from "firebase/auth";
 import { firebaseAuth } from "@/infrastructure/firebase/client";
 import { dangerButtonClass } from "@/shared/ui/styles";
 
-export function LogoutButton() {
+export function LogoutButton({ menuItem = false, label = "Encerrar sessão" }: { menuItem?: boolean; label?: string }) {
   const router = useRouter();
+  const errorId = useId();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
 
@@ -39,14 +40,17 @@ export function LogoutButton() {
     <div className="grid justify-items-start gap-3">
       <button
         type="button"
+        role={menuItem ? "menuitem" : undefined}
         onClick={handleLogout}
         disabled={pending}
-        aria-describedby={error ? "logout-error" : undefined}
-        className={dangerButtonClass}
+        aria-describedby={error ? errorId : undefined}
+        className={menuItem
+          ? "flex min-h-11 w-full items-center rounded-xl px-3 text-left text-sm font-semibold text-expense transition hover:bg-expense-container"
+          : dangerButtonClass}
       >
-        {pending ? "Encerrando…" : "Encerrar sessão"}
+        {pending ? "Encerrando…" : label}
       </button>
-      {error && <p id="logout-error" role="alert" className="rounded-xl bg-expense-container p-3 text-sm text-expense">{error}</p>}
+      {error && <p id={errorId} role="alert" className="rounded-xl bg-expense-container p-3 text-sm text-expense">{error}</p>}
     </div>
   );
 }

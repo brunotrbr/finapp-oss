@@ -7,12 +7,13 @@ import { useFinance } from "@/features/finance/model/finance-context";
 import { Card } from "@/shared/ui/card";
 import { Field } from "@/shared/ui/field";
 import { PageHeader } from "@/shared/ui/page-header";
+import { Notice } from "@/shared/ui/feedback";
 import { buttonClass, dangerButtonClass, formCardClass, inputClass, secondaryButtonClass } from "@/shared/ui/styles";
 
 type Filter = "all" | "expense" | "income";
 
 export function CategorySettings() {
-  const { state, dispatch } = useFinance();
+  const { state, dispatch, remote } = useFinance();
   const [filter, setFilter] = useState<Filter>("all");
   const [createError, setCreateError] = useState("");
   const [editError, setEditError] = useState("");
@@ -23,6 +24,8 @@ export function CategorySettings() {
   const [removing, setRemoving] = useState("");
   const [destination, setDestination] = useState("");
   const [message, setMessage] = useState("");
+
+  if (remote) return <div className="space-y-6"><PageHeader title="Categorias" eyebrow="Organização" /><Notice>Categorias ficam somente leitura até a API oferecer endpoints persistentes.</Notice>{state.categories.length ? <Card>{state.categories.map((category) => <p className="border-b border-border-subtle py-3 last:border-0" key={category}>{category}</p>)}</Card> : null}</div>;
 
   const tone = (category: string) => state.transactions.some((transaction) => transaction.category === category && transaction.amount > 0) ? "income" : "expense";
   const visibleCategories = state.categories.filter((category) => filter === "all" || tone(category) === filter);

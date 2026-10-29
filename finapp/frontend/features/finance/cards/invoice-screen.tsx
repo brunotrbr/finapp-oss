@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { formatDate, formatMoney, invoiceForCycle } from "@/domain/finance/calculations";
+import { monthKey } from "@/domain/finance/period";
 import { invoicePaymentError } from "@/domain/finance/finance-reducer";
 import { DEMO_DATE, DEMO_MONTH } from "@/features/finance/model/demo-state";
 import { useFinance } from "@/features/finance/model/finance-context";
@@ -15,12 +16,14 @@ import { PageHeader } from "@/shared/ui/page-header";
 import { buttonClass, inputClass } from "@/shared/ui/styles";
 
 export function InvoiceScreen({ cardId }: { cardId: string }) {
-  const { state, dispatch } = useFinance();
+  const { state, dispatch, remote } = useFinance();
   const [accountId, setAccountId] = useState("");
   const [message, setMessage] = useState("");
   const card = state.cards.find(({ id }) => id === cardId);
   if (!card) return <MissingEntity label="Cartão" href="/dashboard/cards" />;
-  const invoice = invoiceForCycle(card, state.purchases, DEMO_MONTH);
+  const cycle = remote ? monthKey() : DEMO_MONTH;
+  const invoice = invoiceForCycle(card, state.purchases, cycle);
+  if (remote) return <div className="space-y-7"><PageHeader title={card.name} eyebrow="Fatura somente leitura" description={`Ciclo ${cycle}`} /><Card><p className="text-sm text-muted">Total estimado pelas parcelas recebidas</p><p className="mt-3 text-4xl font-bold tabular-nums">{formatMoney(invoice.total)}</p></Card><Notice>Pagamento e novas compras ficam indisponíveis até a API oferecer endpoints idempotentes de fatura.</Notice><section className="space-y-3"><h2 className="text-xl font-bold">Lançamentos da fatura</h2>{invoice.items.length ? <Card>{invoice.items.map((item) => <EntityRow key={`${item.purchaseId}-${item.installment}`} title={item.description} subtitle={`Parcela ${item.installment} de ${item.installments}`} value={formatMoney(item.amount)} />)}</Card> : <EmptyState>Nenhum lançamento neste ciclo.</EmptyState>}</section></div>;
   const paid = state.invoicePayments.some((payment) => payment.cardId === card.id && payment.cycle === DEMO_MONTH);
   const pay = () => {
     if (!accountId) { setMessage("Selecione uma conta para pagar."); return; }

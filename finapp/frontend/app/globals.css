@@ -56,33 +56,26 @@
   --font-sans: var(--font-plus-jakarta);
 }
 
+* { box-sizing: border-box; }
+
+html { min-width: 320px; }
+
 body {
+  margin: 0;
   background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--primary-container) 45%, transparent) 0, transparent 28rem),
+    radial-gradient(circle at top left, color-mix(in srgb, var(--primary-container) 42%, transparent) 0, transparent 28rem),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-plus-jakarta), Arial, Helvetica, sans-serif;
   font-variant-numeric: tabular-nums;
 }
 
-::selection {
-  background: var(--secondary-container);
-  color: var(--foreground);
-}
-
-button, a, input, select, textarea {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--secondary) 55%, transparent);
-  outline-offset: 3px;
-}
+::selection { background: var(--secondary-container); color: var(--foreground); }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--secondary) 55%, transparent); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;

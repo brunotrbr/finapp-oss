@@ -3,6 +3,8 @@ import { invoiceForCycle } from "./calculations";
 import type { Account, Bill, CreditCard, FinanceState, Purchase, Transaction } from "./types";
 
 export type FinanceAction =
+  | { type: "state/hydrate"; state: FinanceState }
+  | { type: "state/clear"; displayName?: string }
   | { type: "account/add"; account: Account }
   | { type: "account/edit"; account: Account }
   | { type: "account/remove"; id: string }
@@ -45,6 +47,13 @@ export function invoicePaymentError(state: FinanceState, input: InvoicePaymentIn
 
 export function financeReducer(state: FinanceState, action: FinanceAction): FinanceState {
   switch (action.type) {
+    case "state/hydrate":
+      return action.state;
+    case "state/clear":
+      return {
+        accounts: [], transactions: [], bills: [], cards: [], purchases: [],
+        invoicePayments: [], categories: [], displayName: action.displayName || "Usuário",
+      };
     case "account/add":
       return state.accounts.some(({ id }) => id === action.account.id) || !present(action.account.name) || !Number.isFinite(action.account.initialBalance) ? state : { ...state, accounts: [...state.accounts, action.account] };
     case "account/edit": {

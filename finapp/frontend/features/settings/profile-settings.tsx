@@ -10,9 +10,10 @@ import { PageHeader } from "@/shared/ui/page-header";
 import { buttonClass, formCardClass, inputClass } from "@/shared/ui/styles";
 
 export function ProfileSettings() {
-  const { state, dispatch } = useFinance();
+  const { state, dispatch, remote } = useFinance();
   const router = useRouter();
   const [error, setError] = useState("");
+  if (remote) return <div className="space-y-6"><PageHeader title="Meu perfil" eyebrow="Preferências" /><Notice>O nome vem do Firebase. A API financeira não oferece atualização de perfil.</Notice></div>;
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const name = String(new FormData(event.currentTarget).get("name") || "");

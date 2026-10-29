@@ -1,0 +1,71 @@
+import { getApiBaseUrl } from "./config";
+
+export class FinanceApiError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string,
+    public readonly retryable: boolean,
+  ) {
+    super(messageForStatus(status));
+    this.name = "FinanceApiError";
+  }
+}
+
+type RequestOptions = {
+  method?: "GET" | "POST";
+  body?: unknown;
+  idempotencyKey?: string;
+  signal?: AbortSignal;
+  timeoutMs?: number;
+  getToken: () => Promise<string>;
+};
+
+const messageForStatus = (status: number) => {
+  if (status === 0) return "Não foi possível conectar ao serviço financeiro. Verifique sua conexão e tente novamente.";
+  if (status === 401) return "Sua sessão expirou. Entre novamente.";
+  if (status === 403 || status === 404) return "O recurso solicitado não está disponível.";
+  if (status === 429) return "Muitas tentativas. Aguarde e tente novamente.";
+  return status >= 500 ? "O serviço financeiro está temporariamente indisponível." : "Não foi possível concluir a solicitação.";
+};
+
+const safeErrorCode = async (response: Response) => {
+  try {
+    const value = await response.json() as { code?: unknown };
+    return typeof value.code === "string" && /^[a-z0-9_.-]{1,80}$/i.test(value.code) ? value.code : `http_${response.status}`;
+  } catch {
+    return `http_${response.status}`;
+  }
+};
+
+export async function requestJson(path: string, options: RequestOptions): Promise<unknown> {
+  const controller = new AbortController();
+  let timedOut = false;
+  const timeoutId = window.setTimeout(() => { timedOut = true; controller.abort(); }, options.timeoutMs ?? 10_000);
+  const abort = () => controller.abort(options.signal?.reason);
+  options.signal?.addEventListener("abort", abort, { once: true });
+
+  try {
+    const token = await options.getToken();
+    if (!token) throw new FinanceApiError(401, "missing_token", false);
+    const response = await fetch(`${getApiBaseUrl()}${path}`, {
+      method: options.method ?? "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        ...(options.body === undefined ? {} : { "Content-Type": "application/json" }),
+        ...(options.idempotencyKey ? { "Idempotency-Key": options.idempotencyKey } : {}),
+      },
+      body: options.body === undefined ? undefined : JSON.stringify(options.body),
+      signal: controller.signal,
+    });
+    if (!response.ok) throw new FinanceApiError(response.status, await safeErrorCode(response), response.status === 429 || response.status >= 500);
+    return response.status === 204 ? undefined : response.json();
+  } catch (reason) {
+    if (reason instanceof FinanceApiError) throw reason;
+    if (options.signal?.aborted) throw reason;
+    throw new FinanceApiError(0, timedOut ? "timeout" : "network_error", true);
+  } finally {
+    window.clearTimeout(timeoutId);
+    options.signal?.removeEventListener("abort", abort);
+  }
+}

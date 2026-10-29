@@ -7,16 +7,17 @@ import { DEMO_DATE } from "@/features/finance/model/demo-state";
 import { useFinance } from "@/features/finance/model/finance-context";
 import { newId } from "@/features/finance/model/new-id";
 import { Field } from "@/shared/ui/field";
-import { MissingEntity } from "@/shared/ui/feedback";
+import { EmptyState, MissingEntity } from "@/shared/ui/feedback";
 import { PageHeader } from "@/shared/ui/page-header";
 import { buttonClass, formCardClass, inputClass } from "@/shared/ui/styles";
 
 export function PurchaseForm({ cardId }: { cardId: string }) {
-  const { state, dispatch } = useFinance();
+  const { state, dispatch, remote } = useFinance();
   const router = useRouter();
   const [error, setError] = useState<{ field: "description" | "amount" | "date" | "installments"; message: string } | null>(null);
   const card = state.cards.find(({ id }) => id === cardId);
   if (!card) return <MissingEntity label="Cartão" href="/dashboard/cards" />;
+  if (remote) return <EmptyState>Criação de compras fica indisponível até a API oferecer esse endpoint.</EmptyState>;
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

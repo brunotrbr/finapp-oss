@@ -45,7 +45,7 @@ test("login controlado cria sessão e sessão válida não reabre o login", asyn
   await login(page);
   await page.goto("/login");
   await expect(page).toHaveURL(/\/dashboard$/);
-  await expect(page.getByRole("heading", { name: "Minhas Contas" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Visão geral" })).toBeVisible();
   await expect(page.getByText("Olá, Pessoa de teste").first()).toBeVisible();
 });
 
@@ -65,8 +65,8 @@ test("login completo pode ser operado somente por teclado", async ({ page }) => 
 
 test("logout encerra cliente e sessão servidor antes de voltar ao login", async ({ page }) => {
   await login(page);
-  await page.goto("/dashboard/settings/security");
-  await page.getByRole("button", { name: "Encerrar sessão" }).click();
+  await page.getByRole("button", { name: "Abrir menu do usuário" }).click();
+  await page.getByRole("menuitem", { name: "Encerrar sessão" }).click();
   await expect(page).toHaveURL(/\/login$/);
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login$/);
@@ -100,7 +100,7 @@ test("deep link de redefinição inválido é seguro e responsivo", async ({ pag
   await page.setViewportSize({ width: 320, height: 568 });
   await page.goto("/reset-password");
   await expect(page.getByRole("heading", { name: "Crie uma nova senha" })).toBeVisible();
-  await expect(page.getByRole("alert")).toContainText("Link de recuperação inválido");
+  await expect(page.getByRole("alert").filter({ hasText: "Link de recuperação inválido" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Voltar para entrar" })).toBeVisible();
   const hasHorizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
   expect(hasHorizontalOverflow).toBe(false);

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FinanceProvider } from "@/features/finance/model/finance-context";
 import { AccountDetail } from "@/features/finance/accounts/account-detail";
 import { BillDetail } from "@/features/finance/bills/bill-detail";
@@ -16,15 +16,17 @@ const push = vi.fn();
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push }), usePathname: () => "/dashboard" }));
 
 describe("fluxos financeiros", () => {
+  beforeEach(() => push.mockClear());
+
   it("inclui cartões em Minhas contas sem somar limite ao saldo", () => {
     render(<FinanceProvider><Overview /></FinanceProvider>);
 
     expect(screen.getByRole("link", { name: /Cartão principal/ })).toHaveAttribute("href", "/dashboard/cards/card-1");
-    expect(screen.getByText("Limite • fecha dia 20")).toBeInTheDocument();
+    expect(screen.getByText("Cartão • fecha dia 20")).toBeInTheDocument();
     expect(screen.getByText("R$ 8.920,00")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Minhas Contas" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Contas Bancárias" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Cartões de Crédito" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Minhas contas" })).toBeInTheDocument();
+    expect(screen.getByText("Saldo livre")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Ações rápidas" })).toBeInTheDocument();
   });
 
   it("resume entradas, saídas e resultado no extrato", () => {
@@ -44,6 +46,16 @@ describe("fluxos financeiros", () => {
     expect(credit).not.toBeChecked();
     fireEvent.click(credit);
     expect(credit).toBeChecked();
+  });
+
+  it("não navega nem registra lançamento com categoria adulterada", () => {
+    render(<FinanceProvider><TransactionForm /></FinanceProvider>);
+    fireEvent.change(screen.getByLabelText("Valor (R$)"), { target: { value: "25" } });
+    fireEvent.change(screen.getByLabelText("Descrição"), { target: { value: "Teste adulterado" } });
+    fireEvent.change(screen.getByLabelText("Categoria"), { target: { value: "Categoria inexistente" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar lançamento" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("categoria válida");
+    expect(push).not.toHaveBeenCalled();
   });
 
   it("cancelar pagamento não altera e confirmar recalcula os totais", () => {
