@@ -14,8 +14,17 @@ export function totalBalance(accounts: Account[], transactions: Transaction[]) {
 
 export function pendingTotal(bills: Bill[], month: string) {
   return cents(bills
-    .filter((bill) => bill.dueDate.startsWith(month))
+    .filter((bill) => bill.status !== "paid" && bill.dueDate.slice(0, 7) <= month)
     .reduce((sum, bill) => sum + bill.amount, 0));
+}
+
+export function pendingBreakdown(bills: Bill[], month: string) {
+  const open = bills.filter((bill) => bill.status !== "paid");
+  return {
+    overdue: cents(open.filter((bill) => bill.dueDate.slice(0, 7) < month).reduce((sum, bill) => sum + bill.amount, 0)),
+    dueThisMonth: cents(open.filter((bill) => bill.dueDate.startsWith(month)).reduce((sum, bill) => sum + bill.amount, 0)),
+    paid: bills.filter((bill) => bill.status === "paid"),
+  };
 }
 
 const parseMonth = (month: string) => {

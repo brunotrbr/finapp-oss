@@ -1,3 +1,4 @@
+import { FIXED_CATEGORIES } from "@/domain/finance/categories";
 import type { Account, Bill, CreditCard, FinanceState, Purchase, Transaction } from "@/domain/finance/types";
 
 type RecordValue = Record<string, unknown>;
@@ -52,15 +53,16 @@ const unique = <T extends { id: string }>(items: T[], label: string) => {
   return ids;
 };
 
-function mapAccount(value: unknown): Account {
+export function mapAccount(value: unknown): Account {
   const dto = object(value, "Conta");
   currency(dto.currency);
   const type = text(dto.type, "Tipo da conta");
   if (type !== "Corrente" && type !== "Poupança" && type !== "Carteira") throw new Error("Tipo da conta inválido.");
-  return { id: text(dto.id, "ID da conta"), name: text(dto.name, "Nome da conta"), bank: text(dto.bank, "Banco", true), type, initialBalance: cents(dto.initialBalanceCents, "Saldo inicial") };
+  const bank = dto.bank == null ? "" : text(dto.bank, "Banco", true);
+  return { id: text(dto.id, "ID da conta"), name: text(dto.name, "Nome da conta"), bank, type, initialBalance: cents(dto.initialBalanceCents, "Saldo inicial") };
 }
 
-function mapTransaction(value: unknown): Transaction {
+export function mapTransaction(value: unknown): Transaction {
   const dto = object(value, "Lançamento");
   currency(dto.currency);
   const amount = cents(dto.amountCents, "Valor do lançamento");
@@ -68,15 +70,20 @@ function mapTransaction(value: unknown): Transaction {
   return { id: text(dto.id, "ID do lançamento"), accountId: text(dto.accountId, "Conta do lançamento"), description: text(dto.description, "Descrição do lançamento"), amount, date: isoDate(dto.date, "Data do lançamento"), category: text(dto.category, "Categoria"), note: text(dto.note, "Observação", true) };
 }
 
-function mapBill(value: unknown): Bill {
+export function mapBill(value: unknown): Bill {
   const dto = object(value, "Pendência");
   currency(dto.currency);
   const amount = cents(dto.amountCents, "Valor da pendência");
   if (amount <= 0) throw new Error("Valor da pendência deve ser positivo.");
-  return { id: text(dto.id, "ID da pendência"), accountId: text(dto.accountId, "Conta da pendência"), description: text(dto.description, "Descrição da pendência"), amount, dueDate: isoDate(dto.dueDate, "Vencimento da pendência") };
+  const status = dto.status === undefined ? "open" : text(dto.status, "Status da pendência");
+  if (status !== "open" && status !== "paid") throw new Error("Status da pendência inválido.");
+  const paidOn = dto.paidOn == null ? undefined : isoDate(dto.paidOn, "Data de pagamento");
+  const paymentTransactionId = dto.paymentTransactionId == null ? undefined : text(dto.paymentTransactionId, "Lançamento de pagamento");
+  if (status === "paid" && (!paidOn || !paymentTransactionId)) throw new Error("Pendência paga sem dados de pagamento.");
+  return { id: text(dto.id, "ID da pendência"), accountId: text(dto.accountId, "Conta da pendência"), description: text(dto.description, "Descrição da pendência"), amount, dueDate: isoDate(dto.dueDate, "Vencimento da pendência"), status, paidOn, paymentTransactionId };
 }
 
-function mapCard(value: unknown): CreditCard {
+export function mapCard(value: unknown): CreditCard {
   const dto = object(value, "Cartão");
   currency(dto.currency);
   const limit = cents(dto.limitCents, "Limite do cartão");
@@ -110,6 +117,6 @@ export function mapFinancePayload(payload: unknown, displayName: string): Financ
   if (bills.some((item) => !accountIds.has(item.accountId))) throw new Error("Pendência referencia uma conta inexistente.");
   if (purchases.some((item) => !cardIds.has(item.cardId))) throw new Error("Compra referencia um cartão inexistente.");
 
-  const categories = Array.from(new Set(["Outros", ...transactions.map((item) => item.category)]));
+  const categories = [...FIXED_CATEGORIES];
   return { accounts, transactions, bills, cards, purchases, invoicePayments: [], categories, displayName: displayName.trim() || "Usuário" };
 }

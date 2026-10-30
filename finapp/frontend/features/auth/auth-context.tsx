@@ -4,17 +4,31 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { firebaseAuth } from "@/infrastructure/firebase/client";
 
+type AuthUser = Pick<User, "uid" | "email" | "displayName" | "getIdToken">;
+
 type AuthState = {
-  user: User | null;
+  user: AuthUser | null;
   loading: boolean;
+};
+
+const e2eAuthEnabled = () => process.env.NODE_ENV !== "production" && process.env.NEXT_PUBLIC_FINAPP_E2E_AUTH === "1";
+const e2eUser: AuthUser = {
+  uid: "e2e-user",
+  email: "e2e@finapp.local",
+  displayName: "Pessoa de teste",
+  getIdToken: async () => "finapp-e2e-token",
 };
 
 const AuthContext = createContext<AuthState>({ user: null, loading: true });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<AuthState>({ user: null, loading: true });
+  const [state, setState] = useState<AuthState>(() => e2eAuthEnabled()
+    ? { user: e2eUser, loading: false }
+    : { user: null, loading: true });
 
   useEffect(() => {
+    if (e2eAuthEnabled()) return;
+
     try {
       return onAuthStateChanged(firebaseAuth(), (user) =>
         setState({ user, loading: false })

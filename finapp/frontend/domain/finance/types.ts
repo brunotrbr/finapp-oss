@@ -22,6 +22,9 @@ export type Bill = {
   amount: number;
   dueDate: string;
   accountId: string;
+  status: "open" | "paid";
+  paidOn?: string;
+  paymentTransactionId?: string;
 };
 
 export type CreditCard = {

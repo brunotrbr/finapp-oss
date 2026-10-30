@@ -5,6 +5,22 @@ export class ApiConfigurationError extends Error {
   }
 }
 
+export type FinanceDataSource = "api" | "demo";
+
+export function getFinanceDataSource(
+  value = process.env.NEXT_PUBLIC_FINAPP_DATA_SOURCE,
+  environment = process.env.NODE_ENV,
+): FinanceDataSource {
+  const source = value?.trim() || "api";
+  if (source !== "api" && source !== "demo") {
+    throw new ApiConfigurationError("NEXT_PUBLIC_FINAPP_DATA_SOURCE deve ser demo ou api.");
+  }
+  if (source === "demo" && environment === "production") {
+    throw new ApiConfigurationError("O modo demo não pode ser habilitado em produção.");
+  }
+  return source;
+}
+
 export function getApiBaseUrl(value = process.env.NEXT_PUBLIC_API_BASE_URL) {
   if (!value) throw new ApiConfigurationError("NEXT_PUBLIC_API_BASE_URL não foi configurada.");
   let url: URL;

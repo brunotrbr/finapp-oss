@@ -132,7 +132,8 @@ application replicas should not independently race to apply schema changes.
 ## 5. Continuous integration
 
 Both workflows run for pushes and pull requests targeting `main` or `develop`,
-limited to their application path.
+limited to their application path. The backend workflow also includes
+`finapp/backend.tests/**`.
 
 ### Frontend workflow
 
@@ -140,30 +141,28 @@ limited to their application path.
 
 1. Check out the repository.
 2. Run `npm ci`.
-3. Run `npm run build`.
-4. Run `npm run lint`.
-
-There is no dedicated type-check or test step. Next.js build performs type
-checking, but an explicit `npx tsc --noEmit` step would make that contract
-clearer.
+3. Run `npm run test:run` for unit and component tests.
+4. Run `npm run build`, then `npx tsc --noEmit` using generated Next.js types.
+5. Run `npm run lint` before browser tests create isolated generated output.
+6. Install Playwright Chromium with its system dependencies.
+7. Run `npm run test:e2e` in the default demo environment.
+8. Run only `e2e/finance-api.spec.ts` with data source `api` and
+   `NEXT_PUBLIC_API_BASE_URL=https://api.e2e.test`. The API is intercepted by
+   Playwright; port 3101 and `.next-e2e-api` isolate its server and build from demo.
 
 ### Backend workflow
 
 `.github/workflows/backend.yml` uses Ubuntu and .NET 10 with NuGet caching:
 
 1. Check out the repository.
-2. Restore locked dependencies.
-3. Build in Release configuration.
-4. Run `dotnet test` without rebuilding.
+2. Cache NuGet packages using the lockfiles and project files from both
+   `finapp/backend` and `finapp/backend.tests`.
+3. Run `dotnet restore ../backend.tests/Finapp.Api.Tests.csproj --locked-mode`
+   from `finapp/backend`. The test project references the API project.
+4. Build that test project in Release with `--no-restore`.
+5. Run `dotnet test` on that test project in Release with `--no-build`.
 
-There is currently no test project, so the final step does not execute
-application tests.
-
-### Workflow caveat
-
-The backend cache key contains escaped expression text that should be verified
-in a workflow run. Documentation does not assume the cache is effective until
-GitHub Actions confirms it.
+Cache behavior and the complete Ubuntu jobs still require a GitHub Actions run.
 
 ## 6. Production deployment contract
 

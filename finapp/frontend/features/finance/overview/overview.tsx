@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { accountBalance, formatMoney, pendingTotal, totalBalance } from "@/domain/finance/calculations";
+import { accountBalance, formatMoney, pendingBreakdown, pendingTotal, totalBalance } from "@/domain/finance/calculations";
 import { useFinance } from "@/features/finance/model/finance-context";
 import { LogoutButton } from "@/features/auth/logout-button";
 import { Card } from "@/shared/ui/card";
@@ -23,6 +23,7 @@ export function Overview() {
   const month = currentMonth();
   const total = totalBalance(state.accounts, state.transactions);
   const pending = pendingTotal(state.bills, month);
+  const overdue = pendingBreakdown(state.bills, month).overdue;
   const free = total - pending;
 
   return <div className="space-y-8">
@@ -30,22 +31,21 @@ export function Overview() {
 
     <Card className="overflow-hidden border-primary/15 bg-gradient-to-r from-primary-container via-surface to-secondary-container/45"><p className="text-sm text-muted">Saldo total em contas</p><p className="mt-2 text-4xl font-bold text-on-primary-container tabular-nums">{formatMoney(total)}</p></Card>
 
-    <section className="grid gap-4 sm:grid-cols-2" aria-label="Resumo do mês">
-      <Card className="border-warning/20 bg-warning-container/35"><p className="text-sm font-semibold text-warning">Pendências</p><p className="mt-2 text-2xl font-bold tabular-nums">{formatMoney(pending)}</p><Link href="/dashboard/bills" className="mt-3 inline-flex text-sm font-bold text-warning">Ver pendências</Link></Card>
-      <Card className="border-income/20 bg-income-container/35"><p className="text-sm font-semibold text-income">Saldo livre</p><p className="mt-2 text-2xl font-bold tabular-nums">{formatMoney(free)}</p><p className="mt-3 text-xs text-muted">Saldo total menos pendências do mês.</p></Card>
+    <section className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2" aria-label="Resumo do mês">
+      <Card className="min-w-0 border-warning/20 bg-warning-container/35"><p className="text-sm font-semibold text-warning">Pendências abertas</p><p className="mt-2 text-2xl font-bold tabular-nums">{formatMoney(pending)}</p>{overdue > 0 && <p className="mt-1 text-xs font-semibold text-expense">{formatMoney(overdue)} vencidas</p>}<Link href="/dashboard/bills" className="mt-3 inline-flex text-sm font-bold text-warning">Ver pendências</Link></Card>
+      <Card className="min-w-0 border-income/20 bg-income-container/35"><p className="text-sm font-semibold text-income">Saldo livre</p><p className="mt-2 text-2xl font-bold tabular-nums">{formatMoney(free)}</p><p className="mt-3 text-xs text-muted">Saldo total menos pendências do mês.</p></Card>
     </section>
 
-    <Notice>Cartões não aumentam o saldo consolidado. O saldo livre desconta somente pendências; compras de cartão permanecem na fatura e não são descontadas duas vezes.</Notice>
+    {!remote && <Notice>Modo demo local: use as operações normalmente; os dados reiniciam ao recarregar.</Notice>}
 
     <section className="space-y-3" aria-labelledby="accounts-title">
       <div className="flex flex-wrap items-center justify-between gap-3"><h2 id="accounts-title" className="text-xl font-bold">Minhas contas</h2><Link href="/dashboard/accounts/new" className={buttonClass}>Nova conta</Link></div>
-      {state.accounts.length || state.cards.length ? <Card>
-        {state.accounts.map((account) => <EntityRow key={account.id} title={account.name} subtitle={`${account.bank} • ${account.type}`} value={formatMoney(accountBalance(account, state.transactions))} href={`/dashboard/accounts/${account.id}`} />)}
-        {state.cards.map((card) => <EntityRow key={card.id} title={card.name} subtitle={`Cartão • fecha dia ${card.closingDay}`} value={`Limite ${formatMoney(card.limit)}`} href={`/dashboard/cards/${card.id}`} />)}
-      </Card> : <EmptyState>Nenhuma conta ou cartão cadastrado.</EmptyState>}
+      {state.accounts.length ? <Card>
+        {state.accounts.map((account) => <EntityRow key={account.id} title={account.name} subtitle={`${account.bank || "Sem instituição"} • ${account.type}`} value={formatMoney(accountBalance(account, state.transactions))} href={`/dashboard/accounts/${account.id}`} />)}
+      </Card> : <EmptyState>Nenhuma conta cadastrada.</EmptyState>}
     </section>
 
-    <section className="space-y-3" aria-labelledby="quick-actions-title"><h2 id="quick-actions-title" className="text-xl font-bold">Ações rápidas</h2><div className="flex flex-wrap gap-3">{remote ? <><button type="button" className={secondaryButtonClass} disabled title="Endpoint ainda não implementado">Novo lançamento</button><button type="button" className={secondaryButtonClass} disabled title="Endpoint ainda não implementado">Nova pendência</button></> : <><Link href="/dashboard/transactions/new" className={buttonClass}>Novo lançamento</Link><Link href="/dashboard/bills/new" className={secondaryButtonClass}>Nova pendência</Link></>}</div>{remote && <p className="text-xs text-muted">Lançamentos e pendências ficam disponíveis quando os endpoints de criação forem implementados.</p>}</section>
+    <section className="space-y-3" aria-labelledby="quick-actions-title"><h2 id="quick-actions-title" className="text-xl font-bold">Ações rápidas</h2><div className="flex flex-wrap gap-3"><Link href="/dashboard/transactions/new" className={buttonClass}>Novo lançamento</Link><Link href="/dashboard/bills/new" className={secondaryButtonClass}>Nova pendência</Link></div></section>
 
     <section className="space-y-3" aria-labelledby="latest-title"><h2 id="latest-title" className="text-xl font-bold">Últimos lançamentos</h2>{state.transactions.length ? <Card>{[...state.transactions].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5).map((transaction) => <EntityRow key={transaction.id} title={transaction.description} subtitle={transaction.category} value={formatMoney(transaction.amount)} valueTone={transaction.amount >= 0 ? "income" : "expense"} href={`/dashboard/transactions/${transaction.id}`} />)}</Card> : <EmptyState>Nenhum lançamento encontrado.</EmptyState>}</section>
   </div>;

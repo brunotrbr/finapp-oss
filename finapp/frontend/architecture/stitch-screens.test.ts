@@ -46,4 +46,12 @@ describe("Stitch mobile-first screen map", () => {
     const combined = files.map(source).join("\n");
     expect(combined).not.toMatch(/material-symbols|fonts\.googleapis|user-scalable\s*=\s*no/i);
   });
+
+  it("keeps deferred modules out of the MVP navigation", () => {
+    const navigation = source("features/dashboard-shell/dashboard-shell.tsx");
+    const settings = source("features/settings/settings-list.tsx");
+    expect(navigation).not.toContain('label: "Cartões"');
+    expect(settings).not.toContain('["Categorias"');
+    expect(settings).not.toContain('["Estados do sistema"');
+  });
 });

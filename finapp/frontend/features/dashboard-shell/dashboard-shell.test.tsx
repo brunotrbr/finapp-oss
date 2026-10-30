@@ -15,6 +15,7 @@ describe("DashboardShell", () => {
     screen.getAllByRole("link", { name: "Contas" }).forEach((link) => expect(link).toHaveAttribute("aria-current", "page"));
     expect(screen.getAllByRole("navigation", { name: "Navegação principal" })).toHaveLength(2);
     expect(screen.getByText("ana@example.com")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Cartões" })).not.toBeInTheDocument();
   });
 
   it("abre o menu pelo ícone do usuário e expõe a ação de logout", async () => {

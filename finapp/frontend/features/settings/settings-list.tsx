@@ -4,11 +4,9 @@ import { PageHeader } from "@/shared/ui/page-header";
 
 const settings = [
   ["Perfil", "Nome exibido somente nesta sessão", "/dashboard/settings/profile"],
-  ["Categorias", "Organize seus lançamentos", "/dashboard/settings/categories"],
   ["Segurança", "Sessão e autenticação", "/dashboard/settings/security"],
   ["Instalação", "Uso no celular", "/dashboard/settings/install"],
-  ["Sobre", "Escopo desta demonstração", "/dashboard/settings/about"],
-  ["Estados do sistema", "Galeria demonstrativa", "/dashboard/settings/errors/401"],
+  ["Sobre", "Escopo e versão do Finapp", "/dashboard/settings/about"],
 ];
 
 export function SettingsList() {

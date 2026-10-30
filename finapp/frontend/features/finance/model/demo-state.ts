@@ -16,8 +16,8 @@ export const initialFinanceState: FinanceState = {
     { id: "transaction-4", accountId: "account-2", description: "Transferência", amount: 600, date: "2026-10-15", category: "Transferência", note: "" },
   ],
   bills: [
-    { id: "bill-1", description: "Internet", amount: 120, dueDate: "2026-10-22", accountId: "account-1" },
-    { id: "bill-2", description: "Energia", amount: 210, dueDate: "2026-10-25", accountId: "account-1" },
+    { id: "bill-1", description: "Internet", amount: 120, dueDate: "2026-10-22", accountId: "account-1", status: "open" },
+    { id: "bill-2", description: "Energia", amount: 210, dueDate: "2026-10-25", accountId: "account-1", status: "open" },
   ],
   cards: [
     { id: "card-1", name: "Cartão principal", limit: 4500, closingDay: 20, dueDay: 28 },

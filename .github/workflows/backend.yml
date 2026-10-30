@@ -5,10 +5,12 @@ on:
         branches: [main, develop]
         paths:
         - 'finapp/backend/**'
+        - 'finapp/backend.tests/**'
     pull_request:
         branches: [main, develop]
         paths:
         - 'finapp/backend/**'
+        - 'finapp/backend.tests/**'
 
 env:
     DOTNET_CONFIGURATION: Release
@@ -33,15 +35,15 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ~/.nuget/packages
-                  key: \({{ runner.os }}-nuget-\){{ hashFiles('**/packages.lock.json') }}-${{ hashFiles('**/*.csproj') }}
+                  key: ${{ runner.os }}-nuget-${{ hashFiles('finapp/backend/packages.lock.json', 'finapp/backend.tests/packages.lock.json') }}-${{ hashFiles('finapp/backend/*.csproj', 'finapp/backend.tests/*.csproj') }}
                   restore-keys: |
                       ${{ runner.os }}-nuget-
 
             - name: Restore dependencies
-              run: dotnet restore
+              run: dotnet restore ../backend.tests/Finapp.Api.Tests.csproj --locked-mode
 
             - name: Build
-              run: dotnet build --configuration ${{ env.DOTNET_CONFIGURATION }} --no-restore
+              run: dotnet build ../backend.tests/Finapp.Api.Tests.csproj --configuration ${{ env.DOTNET_CONFIGURATION }} --no-restore
 
             - name: Test
-              run: dotnet test --configuration ${{ env.DOTNET_CONFIGURATION }} --no-build --verbosity normal
+              run: dotnet test ../backend.tests/Finapp.Api.Tests.csproj --configuration ${{ env.DOTNET_CONFIGURATION }} --no-build --verbosity normal

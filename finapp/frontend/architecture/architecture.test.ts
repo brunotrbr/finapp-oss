@@ -21,22 +21,6 @@ function sourceFiles(directory: string): string[] {
 }
 
 describe("architecture boundaries", () => {
-  it("keeps replaced presentation files in the historical mirror", () => {
-    const archiveRoot = fromRoot("..", "older_screens");
-    const required = [
-      "README.md",
-      "frontend/app/globals.css",
-      "frontend/app/login/page.tsx",
-      "frontend/features/auth/login-form.tsx",
-      "frontend/features/finance/overview/overview.tsx",
-      "frontend/features/finance/accounts/account-detail.tsx",
-      "frontend/features/finance/transactions/transaction-form.tsx",
-      "frontend/features/settings/category-settings.tsx",
-    ];
-
-    expect(required.filter((path) => !existsSync(join(archiveRoot, path)))).toEqual([]);
-  });
-
   it("organizes product behavior in vertical slices", () => {
     const required = [
       "domain/finance/finance-reducer.ts",

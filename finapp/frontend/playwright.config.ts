@@ -2,6 +2,9 @@ import { defineConfig, devices } from "@playwright/test";
 
 process.env.FINAPP_E2E_AUTH = "1";
 process.env.NEXT_PUBLIC_FINAPP_E2E_AUTH = "1";
+process.env.NEXT_PUBLIC_FINAPP_DATA_SOURCE ??= "demo";
+const port = process.env.FINAPP_E2E_PORT ?? "3100";
+const isolatedServer = process.env.FINAPP_E2E_PORT !== undefined;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -11,7 +14,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: "list",
   use: {
-    baseURL: "http://127.0.0.1:3100",
+    baseURL: `http://127.0.0.1:${port}`,
     trace: "on-first-retry",
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH
       ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH }
@@ -24,7 +27,8 @@ export default defineConfig({
   ],
   webServer: {
     command: "npm run dev -- --hostname 127.0.0.1 --port 3100",
-    url: "http://127.0.0.1:3100/login",
+    ...(isolatedServer ? { command: `npm run dev -- --hostname 127.0.0.1 --port ${port}` } : {}),
+    url: `http://127.0.0.1:${port}/login`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

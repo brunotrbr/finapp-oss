@@ -1,5 +1,6 @@
 import { normalizeSpaces } from "./validation";
 import { invoiceForCycle } from "./calculations";
+import { SYSTEM_PAYMENT_CATEGORY } from "./categories";
 import type { Account, Bill, CreditCard, FinanceState, Purchase, Transaction } from "./types";
 
 export type FinanceAction =
@@ -14,8 +15,9 @@ export type FinanceAction =
   | { type: "transaction/edit"; transaction: Transaction }
   | { type: "transaction/remove"; id: string }
   | { type: "bill/add"; bill: Bill }
+  | { type: "bill/edit"; bill: Bill }
   | { type: "bill/remove"; id: string }
-  | { type: "bill/pay"; id: string; paidOn: string }
+  | { type: "bill/pay"; id: string; paidOn: string; accountId?: string }
   | { type: "card/add"; card: CreditCard }
   | { type: "purchase/add"; purchase: Purchase }
   | { type: "purchase/remove"; id: string }
@@ -30,7 +32,7 @@ const replaceById = <T extends { id: string }>(items: T[], item: T) =>
 const positive = (value: number) => Number.isFinite(value) && value > 0;
 const validDay = (value: number) => Number.isInteger(value) && value >= 1 && value <= 31;
 const present = (value: string) => normalizeSpaces(value).length > 0;
-export const SYSTEM_PAYMENT_CATEGORY = "Outros";
+export { SYSTEM_PAYMENT_CATEGORY } from "./categories";
 const hasCategory = (state: FinanceState, name: string) => state.categories.includes(name);
 
 type InvoicePaymentInput = { cardId: string; cycle: string; accountId: string; paidOn: string };
@@ -105,21 +107,29 @@ export function financeReducer(state: FinanceState, action: FinanceAction): Fina
     case "bill/add":
       if (state.bills.some(({ id }) => id === action.bill.id) || !state.accounts.some(({ id }) => id === action.bill.accountId) || !present(action.bill.description) || !present(action.bill.dueDate) || !positive(action.bill.amount)) return state;
       return { ...state, bills: [...state.bills, action.bill] };
+    case "bill/edit":
+      if (!state.bills.some(({ id }) => id === action.bill.id) || !state.accounts.some(({ id }) => id === action.bill.accountId) || !present(action.bill.description) || !present(action.bill.dueDate) || !positive(action.bill.amount)) return state;
+      return { ...state, bills: replaceById(state.bills, action.bill) };
     case "bill/remove":
-      return state.bills.some(({ id }) => id === action.id) ? { ...state, bills: state.bills.filter(({ id }) => id !== action.id) } : state;
+      return state.bills.some(({ id, status }) => id === action.id && status !== "paid") ? { ...state, bills: state.bills.filter(({ id }) => id !== action.id) } : state;
     case "bill/pay": {
       const bill = state.bills.find(({ id }) => id === action.id);
-      if (!bill || !state.accounts.some(({ id }) => id === bill.accountId) || !hasCategory(state, SYSTEM_PAYMENT_CATEGORY)) return state;
+      const paymentAccountId = action.accountId || bill?.accountId;
+      if (!bill || bill.status === "paid" || !paymentAccountId || !state.accounts.some(({ id }) => id === paymentAccountId) || !hasCategory(state, SYSTEM_PAYMENT_CATEGORY)) return state;
       const transaction: Transaction = {
         id: `payment-${bill.id}`,
-        accountId: bill.accountId,
+        accountId: paymentAccountId,
         description: bill.description,
         amount: -bill.amount,
         date: action.paidOn,
         category: SYSTEM_PAYMENT_CATEGORY,
         note: "Pagamento de pendência",
       };
-      return { ...state, bills: state.bills.filter(({ id }) => id !== bill.id), transactions: [...state.transactions, transaction] };
+      return {
+        ...state,
+        bills: state.bills.map((item) => item.id === bill.id ? { ...item, status: "paid", paidOn: action.paidOn, paymentTransactionId: transaction.id } : item),
+        transactions: [...state.transactions, transaction],
+      };
     }
     case "card/add":
       if (state.cards.some(({ id }) => id === action.card.id) || !present(action.card.name) || !positive(action.card.limit) || !validDay(action.card.closingDay) || !validDay(action.card.dueDay)) return state;

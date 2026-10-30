@@ -18,11 +18,10 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ push }), usePathname: ()
 describe("fluxos financeiros", () => {
   beforeEach(() => push.mockClear());
 
-  it("inclui cartões em Minhas contas sem somar limite ao saldo", () => {
+  it("oculta cartões do dashboard enquanto preserva o saldo das contas", () => {
     render(<FinanceProvider><Overview /></FinanceProvider>);
 
-    expect(screen.getByRole("link", { name: /Cartão principal/ })).toHaveAttribute("href", "/dashboard/cards/card-1");
-    expect(screen.getByText("Cartão • fecha dia 20")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Cartão principal/ })).not.toBeInTheDocument();
     expect(screen.getByText("R$ 8.920,00")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Minhas contas" })).toBeInTheDocument();
     expect(screen.getByText("Saldo livre")).toBeInTheDocument();
@@ -69,29 +68,25 @@ describe("fluxos financeiros", () => {
     expect(screen.getByText("R$ 210,00")).toBeInTheDocument();
   });
 
-  it("bloqueia exclusão de conta ocupada com retorno acessível", () => {
+  it("bloqueia exclusão de conta ocupada com retorno acessível", async () => {
     render(<FinanceProvider><AccountDetail accountId="account-1" /></FinanceProvider>);
     fireEvent.click(screen.getByRole("button", { name: "Excluir conta" }));
     fireEvent.click(screen.getByRole("button", { name: "Confirmar" }));
-    expect(screen.getByRole("alert")).toHaveTextContent("Remova os lançamentos");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Remova os vínculos");
   });
 
-  it("informa e bloqueia exclusão de conta que ainda possui pendências", () => {
+  it("informa e bloqueia exclusão de conta que ainda possui pendências", async () => {
     const state = { ...initialFinanceState, transactions: initialFinanceState.transactions.filter(({ accountId }) => accountId !== "account-1") };
     render(<FinanceProvider initialState={state}><AccountDetail accountId="account-1" /></FinanceProvider>);
     fireEvent.click(screen.getByRole("button", { name: "Excluir conta" }));
     fireEvent.click(screen.getByRole("button", { name: "Confirmar" }));
-    expect(screen.getByRole("alert")).toHaveTextContent("pendências");
+    expect(await screen.findByRole("alert")).toHaveTextContent("pendências");
   });
 
-  it("reclassifica vínculos antes de excluir uma conta e abre o sucesso", () => {
-    render(<FinanceProvider><AccountDetail accountId="account-1" /><Overview /></FinanceProvider>);
-    fireEvent.change(screen.getByLabelText("Conta de destino"), { target: { value: "account-2" } });
-    fireEvent.click(screen.getByRole("button", { name: "Excluir conta" }));
-    fireEvent.click(screen.getByRole("button", { name: "Confirmar" }));
-
-    expect(screen.queryByText("Conta principal")).not.toBeInTheDocument();
-    expect(push).toHaveBeenCalledWith("/dashboard/accounts/deletion-success");
+  it("não oferece reclassificação de conta no MVP", () => {
+    render(<FinanceProvider><AccountDetail accountId="account-1" /></FinanceProvider>);
+    expect(screen.queryByLabelText("Conta de destino")).not.toBeInTheDocument();
+    expect(screen.getByText(/Contas com vínculos não podem ser excluídas/)).toBeInTheDocument();
   });
 
   it("impede categoria duplicada ignorando caixa e espaços", () => {

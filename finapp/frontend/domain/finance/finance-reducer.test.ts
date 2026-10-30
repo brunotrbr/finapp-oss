@@ -29,8 +29,8 @@ const initialFinanceState: FinanceState = {
     { id: "transaction-4", accountId: "account-2", description: "Transferência", amount: 600, date: "2026-10-15", category: "Transferência", note: "" },
   ],
   bills: [
-    { id: "bill-1", description: "Internet", amount: 120, dueDate: "2026-10-22", accountId: "account-1" },
-    { id: "bill-2", description: "Energia", amount: 210, dueDate: "2026-10-25", accountId: "account-1" },
+    { id: "bill-1", description: "Internet", amount: 120, dueDate: "2026-10-22", accountId: "account-1", status: "open" },
+    { id: "bill-2", description: "Energia", amount: 210, dueDate: "2026-10-25", accountId: "account-1", status: "open" },
   ],
   cards: [{ id: "card-1", name: "Cartão principal", limit: 4500, closingDay: 20, dueDay: 28 }],
   purchases: [{ id: "purchase-1", cardId: "card-1", description: "Notebook", amount: 900, date: "2026-10-12", installments: 3 }],
@@ -45,6 +45,16 @@ describe("cálculos financeiros", () => {
     expect(pendingTotal(initialFinanceState.bills, "2026-10")).toBe(330);
     expect(formatMoney(330)).toMatch(/R\$\s?330,00/);
     expect(formatDate("2026-10-05")).toBe("05/10/2026");
+  });
+
+  it("soma vencidas abertas e abertas do mês sem incluir pagas", () => {
+    const bills = [
+      { ...initialFinanceState.bills[0], id: "overdue", dueDate: "2026-09-10", status: "open" as const },
+      { ...initialFinanceState.bills[0], id: "current", dueDate: "2026-10-10", status: "open" as const },
+      { ...initialFinanceState.bills[0], id: "future", dueDate: "2026-11-10", status: "open" as const },
+      { ...initialFinanceState.bills[0], id: "paid", dueDate: "2026-09-10", status: "paid" as const, paidOn: "2026-09-11" },
+    ];
+    expect(pendingTotal(bills, "2026-10")).toBe(240);
   });
 
   it("deriva parcelas da fatura pelo ciclo de fechamento", () => {
@@ -232,7 +242,8 @@ describe("financeReducer", () => {
 
   it("paga pendência atomicamente e uma única vez", () => {
     const paid = financeReducer(initialFinanceState, { type: "bill/pay", id: "bill-1", paidOn: "2026-10-18" });
-    expect(paid.bills).toHaveLength(initialFinanceState.bills.length - 1);
+    expect(paid.bills).toHaveLength(initialFinanceState.bills.length);
+    expect(paid.bills.find(({ id }) => id === "bill-1")).toEqual(expect.objectContaining({ status: "paid", paidOn: "2026-10-18", paymentTransactionId: "payment-bill-1" }));
     expect(paid.transactions).toHaveLength(initialFinanceState.transactions.length + 1);
     expect(paid.transactions.at(-1)?.amount).toBe(-120);
     expect(paid.transactions.at(-1)?.date).toBe("2026-10-18");
